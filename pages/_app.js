@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-// import { Provider } from 'next-auth/client';
+import { SessionProvider } from "next-auth/react"
 import { useRouter } from 'next/router';
 import Layout from '../components/layout';
 // import PropTypes from 'prop-types';
@@ -31,7 +31,7 @@ function MyApp(props) {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       {/* <ThemeProvider theme={theme}> */}
-        {/* <Provider session={pageProps.session}> */}
+        <SessionProvider session={pageProps.session}>
             {showHeaderFooter && (
               <Layout>
                 
@@ -41,7 +41,7 @@ function MyApp(props) {
               </Layout>
             )}
             {!showHeaderFooter && <Component {...pageProps} />}
-          {/* </Provider> */}
+          </SessionProvider>
         
       {/* </ThemeProvider> */}
     </Fragment>
