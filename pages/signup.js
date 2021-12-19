@@ -48,7 +48,7 @@ function Signup({ csrfToken }) {
     const handleSignup = async () => {
        console.log(email, name)         
        console.log('csrf', csrfToken)      
-       await axios.post('/api/auth/signin/email', { email, csrfToken })
+       await axios.post('/api/auth/signin/email', { email, name, csrfToken })
         
         
     };
@@ -164,31 +164,13 @@ function Signup({ csrfToken }) {
                 </Container>
 
 
-        // <div className="App">
-        //   <h1>Create Account</h1>
-        //   <div id="login-form">
-        //       <div class="form-floating"  >
-        //           <form method={'POST'} onSubmit={onSubmit} class="form-control" id="signup-form">
-        //               <input name="username" type="text" placeholder="email" class="form-control"></input>
-        //               <input name="name" type="text" placeholder="name" class="form-control"></input>
-        //               <input name="team-name" type="text" placeholder="team name" class="form-control"></input>
-        //               <input name="password" type="password" placeholder="password" class="form-control"></input>
-        //               <input name="retype-password" type="password" placeholder="retype password" class="form-control"></input>
-        //               <div class="d-grid gap-2 ">
-        //                   <input type='submit' value="submit" id="login-button" class="btn btn-primary"></input>
-                          
-        //               </div>
-        //           </form>
-        
-        //       </div>
-        //   </div>
-        // </div>
     );
 };
 
 export default Signup;
 
 export async function getServerSideProps(context) {
+    
     const csrfToken = await getCsrfToken(context);
   
     return {
