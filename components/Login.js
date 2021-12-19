@@ -124,7 +124,7 @@ function Login({setTeamName, setName}){
                         </Grid>
                         <Grid item>
                             <Link href="/signup" variant="body2" >
-                            {"Don't have an account? Sign Up"}
+                            {"Don't have an account? Sign up"}
                             </Link>
                         </Grid>
                         </Grid>
@@ -143,25 +143,6 @@ function Login({setTeamName, setName}){
             </Box>
         </Container>
 
-        // <div className="App">
-        //   <h1>NFL Playoff Challenge</h1>
-        //   <div id="login-form">
-        //       <div className="form-floating" id="form-floating" >
-        //           <form method={'POST'} onSubmit={onSubmit} className="form-control" id="form-control" >
-        //               <input name="email" type="text" placeholder="email" className="form-control"></input>
-        //               <input name="password" type="password" placeholder="password" className="form-control"></input>
-        //               <div className="d-grid gap-2 ">
-        //                   <input type='submit' value="login" id="login-button" className="btn btn-primary"></input>
-        //                   {/* <Link to="/Signup" className="btn btn-secondary"><button className="btn btn-secondary" id="signup-button" type="button" >new account</button></Link> */}
-                          
-        //               </div>
-        //           </form>
-        
-        //       </div>
-        //   </div>
-        //   {/* <Link to="/AdminQuery" className="btn btn-secondary"><button className="btn btn-secondary" id="admin-query-button" type="button" >admin</button></Link>
-        //   <Link to="/team-builder" className="btn btn-secondary"><button className="btn btn-secondary" id="team-builder-button" type="button" >Team Builder</button></Link> */}
-        // </div>
     );
 };
 
