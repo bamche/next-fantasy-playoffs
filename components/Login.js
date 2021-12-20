@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import { useRouter } from 'next/router';
+import { getCsrfToken } from "next-auth/react"
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -34,32 +34,20 @@ const useStyles = makeStyles({
    
   });
 
-function Login({setTeamName, setName}){
+function Login({ csrfToken }){
     const classes = useStyles();
 
       //state to store input field values
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const router = useRouter();
-   
-    async function onSubmit(e) {
-        e.preventDefault();
-        
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-        const handleLogin = await axios.post('/login', null, {headers,params:{email:e.target[0].value, password:e.target[1].value}})
-        const {name, teamName, email, isLoggedIn:loggedInStatus } = handleLogin.data
-        if(loggedInStatus){
-            setEmail(email);
-            setTeamName(teamName);
-            setName(name);
-            setLoggedIn(loggedInStatus);
-            
-        }; 
-    }; 
-  
+
+    const handleSignup = async () => {
+        console.log(email, name)         
+        console.log('csrf', csrfToken)      
+        await axios.post('/api/auth/signin/email', { email, name, csrfToken })
+         
+         
+     };
+     
     return (
 
         <Container component="main" maxWidth="xs">
@@ -76,11 +64,10 @@ function Login({setTeamName, setName}){
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <form className={classes.form} noValidate onSubmit={onSubmit}>
+                    <form className={classes.form} noValidate >
                         <TextField
                         variant="outlined"
                         margin="normal"
-                        required
                         fullWidth
                         id="email"
                         label="Email Address"
@@ -91,41 +78,21 @@ function Login({setTeamName, setName}){
                             setEmail(e.target.value);
                           }}
                         />
-                        <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={password}
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
-                        />
-                       
+                                         
                         <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={handleSignup}
                         >
                         Sign In
                         </Button>
                         <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                            Forgot password?
-                            </Link>
-                        </Grid>
+                      
                         <Grid item>
-                            <Link href="/signup" variant="body2" >
-                            {"Don't have an account? Sign up"}
-                            </Link>
+                            Send a login link to your email
                         </Grid>
                         </Grid>
                     </form>
@@ -147,3 +114,12 @@ function Login({setTeamName, setName}){
 };
 
 export default Login;
+
+export async function getServerSideProps(context) {
+    
+    const csrfToken = await getCsrfToken(context);
+  
+    return {
+      props: { csrfToken },
+    };
+  }
