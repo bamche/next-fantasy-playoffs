@@ -1,8 +1,10 @@
 import Login from '../components/Login';
+import TeamView from '../components/TeamView';
 import { getSession } from 'next-auth/react';
 
 export default function Home({ session }) {
-  return <Login session={session} />;
+  if(!session) return <Login session={session} />
+  else return <TeamView session={session} />
 }
 
 export async function getServerSideProps(context) {
