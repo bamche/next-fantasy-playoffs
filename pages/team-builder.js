@@ -8,36 +8,45 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
 
+import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { FixedSizeList } from 'react-window';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
 export default function TeamBuilder({ session }) {
-
+  
   const [playerList, setPlayerList] = useState([]);
   const [foundPlayers, setFoundPlayers] = useState([]);
   const [entry, setEntry] = useState('');
   const [teamSelection, setTeamSelection] = 
   useState({
-    qb:[null,'empty'],
-    rb1:[null,'empty'],
-    rb2:[null,'empty'],
-    wr1:[null,'empty'],
-    wr2:[null,'empty'],
-    te:[null,'empty'],
-    flex1:[null,'empty'],
-    flex2:[null,'empty'],
-    flex3:[null,'empty'],
-    flex4:[null,'empty'],
-    k:[null,'empty'],
-    dst:[null,'empty']
+    qb:[null,'QB'],
+    rb1:[null,'RB'],
+    rb2:[null,'RB'],
+    wr1:[null,'WR'],
+    wr2:[null,'WR'],
+    te:[null,'TE'],
+    flex1:[null,'FLEX'],
+    flex2:[null,'FLEX'],
+    flex3:[null,'FLEX'],
+    flex4:[null,'FLEX'],
+    k:[null,'K'],
+    dst:[null,'DST']
 
   });
   const [addedTags, setAddedTags] = useState([]);
   const [alertOpen, setAlertOpen] = useState(false);   
+
+  const email = session.user.email;
 
   //close alert snackbox
   const handleClose = (event, reason) => {
@@ -57,22 +66,19 @@ export default function TeamBuilder({ session }) {
     const {qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst} = teamSelection;
 
     const postTeam = await axios.post(
-      '/team-builder-data', 
-      null,
+      '/api/team-builder', 
+      {
+        email, 
+        qb:qb[0], rb1:rb1[0], rb2:rb2[0], 
+        wr1:wr1[0], wr2:wr2[0], te:te[0], 
+        flex1:flex1[0], flex2:flex2[0], flex3:flex3[0], 
+        flex4:flex4[0], k:k[0], dst:dst[0]
+      },
       {
         headers,
-        params:
-          {
-            email, teamName, name, 
-            qb:qb[0], rb1:rb1[0], rb2:rb2[0], 
-            wr1:wr1[0], wr2:wr2[0], te:te[0], 
-            flex1:flex1[0], flex2:flex2[0], flex3:flex3[0], 
-            flex4:flex4[0], k:k[0], dst:dst[0]
-          }});
+      });
 
-      
-     setSubmission({players:{qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst}, ids:postTeam.data})
-     
+         
      if(postTeam.data.success) setAlertOpen(true);
      console.log(alertOpen)
   }
@@ -81,7 +87,7 @@ export default function TeamBuilder({ session }) {
 
   useEffect(() =>{
     const fetchPlayers = async () => {
-      const players = await axios.get('/api/team-builder')
+      const players = await axios.get('/api/team-builder/')
       const fetchedPlayerList = players.data.playerList;
       const fetchedDefList = players.data.defList;
       
@@ -217,32 +223,48 @@ export default function TeamBuilder({ session }) {
       <h1>Welcome ///NAME///!</h1>
       <h3>Please make your player selection </h3>
       
-      <div className="teamBuilder">
-        <div className="selectedTeam">
-          <h2> Team Selection</h2>
-          <div className="form-control" id="selected-flex">
-            <div className="positionColumn">
-              <div>QB</div>
-              <div>RB</div>
-              <div>RB</div>
-              <div>WR</div>
-              <div>WR</div>
-              <div>TE</div>
-              <div>FLEX</div>
-              <div>FLEX</div>
-              <div>FLEX</div>
-              <div>FLEX</div>
-              <div>K</div>
-              <div>DST</div>
-            </div>
-            <PlayerColumn teamSelection={teamSelection} removePlayer={removePlayer} />
-          
-          </div>
-          <input type='submit' value="submit" id="submit-team" className="btn btn-primary" onClick={submitTeam}></input>
-        </div>
-        <div className="playerList">
-          <h2>Player List</h2>
-          <input type="search" value ={entry} className="form-control" placeholder="Search" onChange={filter}/>
+      {/* <div className="teamBuilder"> */}
+      <Grid 
+        container 
+        spacing={{ xs: 1, sm: 3, md: 4 }} 
+        columns={{ xs: 4, sm: 8, md: 12 }}
+        direction="row"
+        width={"100%"}
+        >
+        <Grid item xs={2} sm={4} md={4}>
+          <Card
+                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
+                
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Typography gutterBottom variant="h5" component="h2">
+                Team Selection
+              </Typography>
+              <Typography>
+                <PlayerColumn teamSelection={teamSelection} removePlayer={removePlayer} />
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" variant="contained" onClick={submitTeam}>Submit Team</Button>
+            </CardActions>
+          </Card>  
+        </Grid>
+        <Grid item xs={2} sm={4} md={4}>
+          <Card
+            sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+          >      
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Typography gutterBottom variant="h5" component="h2">
+              Player List
+              </Typography>
+          <TextField 
+            fullWidth 
+            label="Search field" 
+            id="search" 
+            size="small"
+            hiddenLabel
+            onChange={filter}
+          />
           <List
             sx={{
               width: '100%',
@@ -250,24 +272,23 @@ export default function TeamBuilder({ session }) {
               bgcolor: 'background.paper',
               position: 'relative',
               overflow: 'auto',
-              maxHeight: 300,
+              maxHeight: 380,
               '& ul': { padding: 0 },
             }}
             subheader={<li />}
           >
           {foundPlayers.map(el => (<li className="list-group-item" key={el[0]} playerid={el[0]} onClick={addPlayer}>{el[1]}</li>))} 
           </List>
-          <ul className="list-group"> 
-            
-          </ul>
-
-        </div> 
-      </div>
-      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
+          </CardContent>
+          </Card> 
+        </Grid>
+      </Grid>  
+      {/* </div> */}
+      {/* <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           Team Subbmitied!
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </div>
 
   )
