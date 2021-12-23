@@ -46,10 +46,8 @@ function Signup({ csrfToken }) {
    
 
     const handleSignup = async () => {
-       console.log(email, name)         
-       console.log('csrf', csrfToken)      
+           
        await axios.post('/api/auth/signin/email', { email, name, csrfToken })
-        
         
     };
    

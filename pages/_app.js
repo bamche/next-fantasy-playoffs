@@ -1,29 +1,22 @@
 import React, { Fragment, useEffect } from 'react';
 import { SessionProvider } from "next-auth/react"
 import { useRouter } from 'next/router';
-import Layout from '../components/layout';
 // import PropTypes from 'prop-types';
 import Head from 'next/head';
 
 // Stying imports
 // import { ThemeProvider } from '@material-ui/core/styles';
-// import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
 
 
 function MyApp(props) {
   const router = useRouter();
   const { Component, pageProps } = props;
-  const pathsToExcludeHeaderFooter = ['/signin'];
-  const showHeaderFooter = !pathsToExcludeHeaderFooter.includes(router.pathname);
-
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-
+  
   return (
     <Fragment>
       <Head>
@@ -32,25 +25,20 @@ function MyApp(props) {
       </Head>
       {/* <ThemeProvider theme={theme}> */}
         <SessionProvider session={pageProps.session}>
-            {showHeaderFooter && (
-              <Layout>
-                
-                  {/* <CssBaseline /> */}
-                  <Component {...pageProps} />
-                
-              </Layout>
-            )}
-            {!showHeaderFooter && <Component {...pageProps} />}
-          </SessionProvider>
+          <AppBar position="relative">
+            <Toolbar>
+              <Typography variant="h6" color="inherit" noWrap>
+                NFL Playoff Challenge
+              </Typography>
+            </Toolbar>
+          </AppBar>     
+          <CssBaseline />
+          <Component {...pageProps} />
+        </SessionProvider>
         
       {/* </ThemeProvider> */}
     </Fragment>
   );
 }
-
-// MyApp.propTypes = {
-//   Component: PropTypes.elementType.isRequired,
-//   pageProps: PropTypes.object.isRequired,
-// };
 
 export default MyApp;
