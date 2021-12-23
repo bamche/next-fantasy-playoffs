@@ -1,14 +1,13 @@
 import db from '../../lib/playerDataModels'
 
 export default async function teamBuilder(req, res) {
-
   if (req.method === 'POST') {
 
     try{
       const { 
         email, 
-        teamName:team_name, 
-        name:user_name, 
+        // teamName:team_name, 
+        // name:user_name, 
         qb, 
         rb1, 
         rb2, 
@@ -21,14 +20,14 @@ export default async function teamBuilder(req, res) {
         flex4, 
         k, 
         dst
-      } = req.query;
+      } = req.body;
 
-      const teamEntry = { user_name, email, team_name,  qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst };
+      const teamEntry = { email, qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst };
       
       const SQLQueryString = 
       `INSERT INTO "public"."user_list" 
-      (user_name, email, team_name, qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst) 
-      VALUES ('${user_name}', '${email}', '${team_name}',  '${qb}', '${rb1}', '${rb2}', '${wr1}',
+      (email, user_name, team_name, qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst) 
+      VALUES ('${email}', 'user', 'team', '${qb}', '${rb1}', '${rb2}', '${wr1}',
               '${wr2}', '${te}', '${flex1}', '${flex2}', '${flex3}', '${flex4}', '${k}', '${dst}') 
       ON CONFLICT (email) 
       DO UPDATE 
@@ -63,7 +62,7 @@ export default async function teamBuilder(req, res) {
       
       const playerList = await db.query(playerQueryString);
       const defList = await db.query(defQueryString);
-      
+
       res.status(200).json({
         playerList:playerList.rows, 
         defList:defList.rows

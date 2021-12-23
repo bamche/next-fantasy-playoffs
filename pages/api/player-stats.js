@@ -6,7 +6,7 @@ export default async function playerStats(req, res) {
     //intial call to retieve player ID, then put into array for ordering since results return unordered
     const playerListQueryString = `SELECT (qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst) FROM public.user_list WHERE email= '${email}';`;
     const SQLplayerIDList = await db.query(playerListQueryString);
-    
+    console.log(SQLplayerIDList)
     const rawPlayerIDList = SQLplayerIDList.rows[0].row;
     const playerIDList = rawPlayerIDList.replace('(' , '').replace(')', '').split(',');
 
@@ -17,7 +17,7 @@ export default async function playerStats(req, res) {
     
     //reorder results
     playerIDList.forEach( id => {
-      for(element of individualTeamStats){
+      for(const element of individualTeamStats){
         if(element.player_id == id) playerStats.push(element);
       };
     });
