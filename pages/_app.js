@@ -3,14 +3,16 @@ import { SessionProvider } from "next-auth/react"
 import { useRouter } from 'next/router';
 // import PropTypes from 'prop-types';
 import Head from 'next/head';
+import Drawer from '../components/Drawer'
 
 // Stying imports
-// import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 function MyApp(props) {
@@ -27,6 +29,8 @@ function MyApp(props) {
         <SessionProvider session={pageProps.session}>
           <AppBar position="relative">
             <Toolbar>
+              <Drawer></Drawer>
+              
               <Typography variant="h6" color="inherit" noWrap>
                 NFL Playoff Challenge
               </Typography>
