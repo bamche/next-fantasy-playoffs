@@ -4,7 +4,7 @@ module.exports = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://api.example.com/:path*',
+        destination: 'https://nfl-playoff-challenge-7xnic8l8l-bamche.vercel.app/:path*',
       },
     ]
   },
