@@ -1,13 +1,13 @@
 // next.config.js
 module.exports = {
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://nfl-playoff-challenge-7xnic8l8l-bamche.vercel.app/:path*',
-      },
-    ]
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: 'https://nfl-playoff-challenge-7xnic8l8l-bamche.vercel.app/:path*',
+  //     },
+  //   ]
+  // },
   // async headers() {
   //   return [
   //     {
