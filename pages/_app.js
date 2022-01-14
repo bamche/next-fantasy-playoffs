@@ -29,7 +29,7 @@ function MyApp(props) {
         <SessionProvider session={pageProps.session}>
           <AppBar position="relative">
             <Toolbar>
-              <Drawer></Drawer>
+              <Drawer router={router}/>
               
               <Typography variant="h6" color="inherit" noWrap>
                 NFL Playoff Challenge
