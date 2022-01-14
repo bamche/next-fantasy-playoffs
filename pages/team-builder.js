@@ -220,10 +220,9 @@ export default function TeamBuilder({ session }) {
   
   return (
     <div>
-      <h1>Welcome ///NAME///!</h1>
+      <h1>Welcome {email}</h1>
       <h3>Please make your player selection </h3>
       
-      {/* <div className="teamBuilder"> */}
       <Grid 
         container 
         spacing={{ xs: 1, sm: 3, md: 4 }} 
@@ -283,12 +282,7 @@ export default function TeamBuilder({ session }) {
           </Card> 
         </Grid>
       </Grid>  
-      {/* </div> */}
-      {/* <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          Team Subbmitied!
-        </Alert>
-      </Snackbar> */}
+      
     </div>
 
   )
