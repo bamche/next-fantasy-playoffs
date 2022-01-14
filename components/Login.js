@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import { getCsrfToken } from "next-auth/react"
+
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -115,11 +115,11 @@ function Login({ csrfToken }){
 
 export default Login;
 
-export async function getServerSideProps(context) {
+// export async function getServerSideProps(context) {
     
-    const csrfToken = await getCsrfToken(context);
+//     const csrfToken = await getCsrfToken(context);
   
-    return {
-      props: { csrfToken },
-    };
-  }
+//     return {
+//       props: { csrfToken },
+//     };
+//   }
