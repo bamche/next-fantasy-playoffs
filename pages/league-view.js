@@ -92,12 +92,15 @@ const columns = [
 
 
 export default function LeagueView({ session }){
-
+  const startTime = Date.parse('15 Jan 2022 21:31:00 GMT'); 
+  const now = Date.now();
   const email = session.user.email;
   const [rows, setRows] = useState([])
 
   useEffect(() =>{
   const fetchPlayer = async () => {
+    if(now < startTime) return;
+
     const tempRows = []
     const stats = await axios.get('/api/league-view');
     const leagueStats = stats.data.leagueStats;
@@ -208,6 +211,9 @@ export default function LeagueView({ session }){
   return(
     <div > 
       <h1> Leader Board </h1>
+      {now < startTime && (
+        <h2> *** Leader Board available after Jan 15 - 1:30pm PT***</h2>
+      )}
       <div style={{ height: 600, width: '100%' }}>
       <DataGrid
         rows={rows}

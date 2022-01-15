@@ -39,20 +39,18 @@ export default function TeamBuilder({ session }) {
     dst:[null,'DST']
 
   });
+
+  const startTime = Date.parse('15 Jan 2022 21:31:00 GMT'); 
+  const now = Date.now();
+
   const [addedTags, setAddedTags] = useState([]); 
 
   const email = session.user.email;
 
-  //close alert snackbox
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setAlertOpen(false);
-  };
-
+  
   const submitTeam = async () => {
+    if(now > startTime) return;
+
     const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -206,13 +204,11 @@ export default function TeamBuilder({ session }) {
 
   };
 
-  //need to add logic to rerout if no session?
-  // if (!isLoggedIn) return <Redirect push to="/login" />
-  
   return (
     <div>
       <h1>Welcome {email}</h1>
       <h3>Please make your player selection </h3>
+      <h4>New submissions will overwrite previous submissions - available until 1/15 at 1:30pm PT </h4>
       
       <Grid 
         container 
