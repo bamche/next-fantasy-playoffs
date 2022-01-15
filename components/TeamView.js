@@ -189,7 +189,7 @@ function TeamView({ session }){
   fetchPlayer();
 }, []);
   return(
-    <div className="team-view"> 
+    <div > 
       <h1>{email} - Team View </h1>
       <div style={{ height: 600, width: '100%' }}>
       <DataGrid
@@ -209,12 +209,3 @@ function TeamView({ session }){
 
 export default TeamView;
 
-export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
-
-  return {
-    props: {
-      session: sessionUser,
-    },
-  };
-}

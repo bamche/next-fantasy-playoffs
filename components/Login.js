@@ -36,17 +36,16 @@ const useStyles = makeStyles({
 
 function Login({ csrfToken }){
     const classes = useStyles();
-
       //state to store input field values
     const [email, setEmail] = useState('');
 
     const handleSignup = async () => {
-        console.log(email, name)         
+        console.log(email)         
         console.log('csrf', csrfToken)      
-        await axios.post('/api/auth/signin/email', { email, name, csrfToken })
-         
-         
-     };
+        const response = await axios.post('/api/auth/signin/email', { email, csrfToken })
+        console.log(response)
+        // router.push('/verification')
+    };
      
     return (
 
@@ -114,12 +113,3 @@ function Login({ csrfToken }){
 };
 
 export default Login;
-
-// export async function getServerSideProps(context) {
-    
-//     const csrfToken = await getCsrfToken(context);
-  
-//     return {
-//       props: { csrfToken },
-//     };
-//   }
