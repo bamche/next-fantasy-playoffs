@@ -5,9 +5,7 @@ export default async function teamBuilder(req, res) {
 
     try{
       const { 
-        email, 
-        // teamName:team_name, 
-        // name:user_name, 
+        email,  
         qb, 
         rb1, 
         rb2, 
@@ -26,8 +24,8 @@ export default async function teamBuilder(req, res) {
       
       const SQLQueryString = 
       `INSERT INTO "public"."user_list" 
-      (email, user_name, team_name, qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst) 
-      VALUES ('${email}', 'user', 'team', '${qb}', '${rb1}', '${rb2}', '${wr1}',
+      (email, qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst) 
+      VALUES ('${email}', '${qb}', '${rb1}', '${rb2}', '${wr1}',
               '${wr2}', '${te}', '${flex1}', '${flex2}', '${flex3}', '${flex4}', '${k}', '${dst}') 
       ON CONFLICT (email) 
       DO UPDATE 
