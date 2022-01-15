@@ -35,7 +35,7 @@ const useStyles = makeStyles({
    
   });
 
-function Login({ csrfToken }){
+export default function Login({ csrfToken }){
     const classes = useStyles();
       //state to store input field values
     const [email, setEmail] = useState('');
@@ -113,8 +113,6 @@ function Login({ csrfToken }){
 
     );
 };
-
-export default Login;
 
 export async function getServerSideProps(context) {
   const csrfToken = await getCsrfToken(context);
