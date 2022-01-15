@@ -14,8 +14,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
-
-import { useRouter } from 'next/router';
+import { getCsrfToken } from 'next-auth/react'
 
 const useStyles = makeStyles({
     card: {
@@ -36,18 +35,17 @@ const useStyles = makeStyles({
    
   });
 
-function Login(){
+function Login({ csrfToken }){
     const classes = useStyles();
       //state to store input field values
     const [email, setEmail] = useState('');
-    const router = useRouter();
 
-    const routeToSignIn = async () => {
-        // console.log(email)         
-        // console.log('csrf', csrfToken)      
-        // const response = await axios.post('/api/auth/signin/email', { email, csrfToken })
-        // console.log(response)
-        router.push('/login')
+    const handleSignup = async () => {
+        console.log(email)         
+        console.log('csrf', csrfToken)      
+        const response = await axios.post('/api/auth/signin/email', { email, csrfToken })
+        console.log(response)
+        // router.push('/verification')
     };
      
     return (
@@ -59,25 +57,43 @@ function Login(){
                 <Box p={3}>
                     <CssBaseline />
                     <div className={classes.paper}>
-                                        
+                    <Avatar className={classes.avatar}>
+                        {/* <HouseIcon /> */}
+                    </Avatar>
+                    
                     <Typography component="h1" variant="h5">
-                        NFL Playoff Challenge 2022
+                        Sign in
                     </Typography>
                     <form className={classes.form} noValidate >
-                                                                 
+                        <TextField
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                          }}
+                        />
+                                         
                         <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={routeToSignIn}
+                        onClick={handleSignup}
                         >
-                        redirect to sign in page
+                        Sign In
                         </Button>
                         <Grid container>
                       
-                        
+                        <Grid item>
+                            Send a login link to your email
+                        </Grid>
                         </Grid>
                     </form>
 
@@ -98,3 +114,11 @@ function Login(){
 };
 
 export default Login;
+
+export async function getServerSideProps(context) {
+  const csrfToken = await getCsrfToken(context);
+
+  return {
+    props: { csrfToken },
+  };
+}
