@@ -61,8 +61,9 @@ export default function TemporaryDrawer() {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
+              onClick={toggleDrawer(anchor, true)}
             >
-              <MenuIcon  onClick={toggleDrawer(anchor, true)}/>
+              <MenuIcon  />
             </IconButton>
           {/* </Button> */}
           <Drawer
