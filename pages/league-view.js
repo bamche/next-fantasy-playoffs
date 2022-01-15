@@ -206,7 +206,7 @@ export default function LeagueView({ session }){
   fetchPlayer();
 }, []);
   return(
-    <div className="team-view"> 
+    <div > 
       <h1> Leader Board </h1>
       <div style={{ height: 600, width: '100%' }}>
       <DataGrid

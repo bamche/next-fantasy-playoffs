@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 
 import axios from "axios";
 import PlayerColumn from '../components/PlayerColumn';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import { makeStyles } from '@mui/styles';
-
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -43,8 +39,7 @@ export default function TeamBuilder({ session }) {
     dst:[null,'DST']
 
   });
-  const [addedTags, setAddedTags] = useState([]);
-  const [alertOpen, setAlertOpen] = useState(false);   
+  const [addedTags, setAddedTags] = useState([]); 
 
   const email = session.user.email;
 
@@ -77,10 +72,6 @@ export default function TeamBuilder({ session }) {
       {
         headers,
       });
-
-         
-     if(postTeam.data.success) setAlertOpen(true);
-     console.log(alertOpen)
   }
   
   const positionArray = ['qb', 'rb1', 'rb2', 'wr1', 'wr2', 'te', 'flex1', 'flex2', 'flex3', 'flex4', 'k', 'dst'];
