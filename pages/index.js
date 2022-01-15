@@ -1,6 +1,6 @@
 import Login from '../components/Login';
 import TeamView from '../components/TeamView';
-import { getSession, getCsrfToken } from 'next-auth/react';
+import { getSession, getCsrfToken } from 'next-auth/client';
 
 export default function Home({ session, csrfToken }) {
   if(!session) return <Login session={session} csrfToken={csrfToken}  />

@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
-import { getCsrfToken } from 'next-auth/react'
+import { getCsrfToken } from 'next-auth/client'
 import { useRouter } from 'next/router';
 
 const useStyles = makeStyles({

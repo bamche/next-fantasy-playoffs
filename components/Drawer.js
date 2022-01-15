@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
-import { signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
 export default function TemporaryDrawer({ session }) {
