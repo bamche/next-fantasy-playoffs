@@ -8,19 +8,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
-
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-export default function TemporaryDrawer() {
+export default function TemporaryDrawer({ session }) {
   const [state, setState] = React.useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
   });
-
+  
   const router = useRouter();
-
+  console.log('session', session)
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -45,7 +45,13 @@ export default function TemporaryDrawer() {
         ))}
       </List>
       <Divider />
-      
+      {
+        session && (
+          <ListItem button >
+            <ListItemText primary={'Sign Out'} onClick={() => signOut({ callbackUrl: `/` })} />
+          </ListItem>
+        )
+      }
     </Box>
   );
 
@@ -53,7 +59,6 @@ export default function TemporaryDrawer() {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          {/* <Button onClick={toggleDrawer(anchor, true)}> */}
             
             <IconButton
               size="large"
@@ -65,7 +70,6 @@ export default function TemporaryDrawer() {
             >
               <MenuIcon  />
             </IconButton>
-          {/* </Button> */}
           <Drawer
             anchor={anchor}
             open={state[anchor]}

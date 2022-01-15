@@ -25,11 +25,10 @@ function MyApp(props) {
         <title>NFL Fantasy Playoffs</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      {/* <ThemeProvider theme={theme}> */}
         <SessionProvider session={pageProps.session}>
           <AppBar position="relative">
             <Toolbar>
-              <Drawer router={router}/>
+              <Drawer router={router} session={pageProps.session}/>
               
               <Typography variant="h6" color="inherit" noWrap>
                 NFL Playoff Challenge
