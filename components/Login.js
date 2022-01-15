@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -15,7 +14,7 @@ import Divider from '@mui/material/Divider';
 import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
 
-import { useRouter } from 'next/router';
+import Link from 'next/link'
 
 const useStyles = makeStyles({
     card: {
@@ -40,16 +39,7 @@ function Login(){
     const classes = useStyles();
       //state to store input field values
     const [email, setEmail] = useState('');
-    const router = useRouter();
-
-    const routeToSignIn = async () => {
-        // console.log(email)         
-        // console.log('csrf', csrfToken)      
-        // const response = await axios.post('/api/auth/signin/email', { email, csrfToken })
-        // console.log(response)
-        router.push('/login')
-    };
-     
+        
     return (
 
         <Container component="main" maxWidth="xs">
@@ -64,17 +54,17 @@ function Login(){
                         NFL Playoff Challenge 2022
                     </Typography>
                     <form className={classes.form} noValidate >
-                                                                 
-                        <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={routeToSignIn}
-                        >
-                        redirect to sign in page
-                        </Button>
+                    <Link href="/login">
+                      <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      >
+                      redirect to sign in page
+                      </Button>
+                    </Link>                                         
                         <Grid container>
                       
                         
