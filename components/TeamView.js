@@ -3,10 +3,11 @@ import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 const columns = [
-  { 
-    field: 'playerid', 
-    headerName: 'Player ID', 
-    width: 130 },
+  // { 
+  //   field: 'playerid', 
+  //   headerName: 'Player ID', 
+  //   width: 130,
+  // },
   {
     field: 'name',
     headerName: 'Player name',
@@ -62,7 +63,10 @@ const columns = [
     editable: false,
   },
 ];
-
+columns.forEach(ele => {
+  ele.align = 'center'
+  ele.headerAlign = 'center'
+})
 
 function TeamView({ session }){
   const [rows, setRows] = useState([])
@@ -197,6 +201,7 @@ function TeamView({ session }){
       <DataGrid
         rows={rows}
         columns={columns}
+        density={'compact'}
         pageSize={13}
         disableSelectionOnClick
         disableColumnMenu
