@@ -39,7 +39,7 @@ const columns = [
   },
   {
     field: 'te',
-    headerName: 'WR2',
+    headerName: 'TE',
     width: 130,
   },
   {
@@ -70,31 +70,34 @@ const columns = [
   {
     field: 'dst',
     headerName: 'DST',
-    width: 130,
+    width: 100,
   },
   {
     field: 'week1',
     headerName: 'Wild Card',
-    width: 150,
+    width: 120,
   },
   {
     field: 'week2',
     headerName: 'Divisional',
-    width: 150,
+    width: 120,
   },
   {
     field: 'week3',
     headerName: 'Conference',
-    width: 150,
+    width: 120,
   },
   {
     field: 'week4',
     headerName: 'Super Bowl',
-    width: 150,
+    width: 120,
   },
   
 ];
-
+columns.forEach(ele => {
+  ele.align = 'center'
+  ele.headerAlign = 'center'
+})
 
 export default function LeagueView({ session }){
   const startTime = Date.parse('15 Jan 2022 21:31:00 GMT'); 
@@ -153,8 +156,10 @@ export default function LeagueView({ session }){
           //allow for points allowed scoring logic
           if(id === 5) {
             const pointsAllowed = defStats[stat+week];
-
-            if(pointsAllowed === 0 ){
+            if(pointsAllowed === null){
+              teamObject['week'+ week] += 0
+            } 
+              else if(pointsAllowed === 0 ){
               teamObject['week'+ week] += 12
             } else if(pointsAllowed < 7){
               teamObject['week'+ week] += 8
@@ -198,16 +203,19 @@ export default function LeagueView({ session }){
           //iterate through each stat multiplying by point value and adding to week total
           offStatRecords.forEach( (stat, id) => {
             teamObject['week'+ week] += ele[stat+week]*(offStatRecordPoints[id]);
-            
           });
           
         });
         
       });
       //sum up each week total for overall total
-      teamObject.total = (teamObject.week1 + teamObject.week2 + teamObject.week3 + teamObject.week4).toFixed(2);
+      teamObject.week1 = Number((teamObject.week1).toFixed(2));
+      teamObject.week2 = Number((teamObject.week2).toFixed(2));
+      teamObject.week3 = Number((teamObject.week3).toFixed(2));
+      teamObject.week4 = Number((teamObject.week4).toFixed(2));
+      teamObject.total = (teamObject.week1 + teamObject.week2 + teamObject.week3 + teamObject.week4)//.toFixed(2);
       tempRows.push(teamObject);
-      teamID++
+      teamID++;
     };
     setRows(tempRows);
   };
@@ -219,11 +227,12 @@ export default function LeagueView({ session }){
       {now < startTime && (
         <h2> *** Leader Board available after Jan 15 - 1:30pm PT***</h2>
       )}
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ height: 700, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={13}
+        // pageSize={18}
+        density={'compact'}
         disableSelectionOnClick
         components={{
           Toolbar: GridToolbar,
