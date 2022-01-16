@@ -38,6 +38,11 @@ const columns = [
     width: 130,
   },
   {
+    field: 'te',
+    headerName: 'WR2',
+    width: 130,
+  },
+  {
     field: 'flex1',
     headerName: 'FLEX1',
     width: 130,
@@ -166,7 +171,7 @@ export default function LeagueView({ session }){
         });
       });
       //array to handle position tags to match with columns
-      const positionList = ['qb', 'rb1', 'rb2', 'wr1', 'wr2', 'flex1', 'flex2', 'flex3', 'flex4', 'k', 'dst']
+      const positionList = ['qb', 'rb1', 'rb2', 'wr1', 'wr2', 'te', 'flex1', 'flex2', 'flex3', 'flex4', 'k', 'dst']
       
       //process offensive information from database and calculate scores
       offStats.forEach( (ele, id) => {
