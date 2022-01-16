@@ -10,10 +10,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-
 
 function MyApp(props) {
   const router = useRouter();
@@ -22,7 +18,7 @@ function MyApp(props) {
   return (
     <Fragment>
       <Head>
-        <title>NFL Fantasy Playoffs</title>
+        <title>NFL Playoff Challenge</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
         <Provider session={pageProps.session}>
