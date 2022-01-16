@@ -24,6 +24,7 @@ export default async function detailedPlayerStats(req, res) {
     //process each row to make a list of players to check against
     SQLplayerIDList.rows.forEach( row => idString += row.row )
     console.log(SQLplayerIDList)
+    console.log(idString, typeof idString);
     const rawPlayerIDList = idString.replaceAll(')(' , ',')
     const statsQueryString = `SELECT * FROM public.player_list WHERE player_id IN ${rawPlayerIDList}; `
     const offensePlayerStats =  (await db.query(statsQueryString)).rows;
