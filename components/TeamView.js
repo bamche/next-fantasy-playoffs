@@ -114,8 +114,10 @@ function TeamView({ session }){
         //allow for points allowed scoring logic
         if(id === 5) {
           const pointsAllowed = defStats[stat+week];
-
-          if(pointsAllowed === 0 ){
+          if(pointsAllowed === null){
+            defWeekTotal += 0
+          } 
+            else if(pointsAllowed === 0 ){
             defWeekTotal += 12
           } else if(pointsAllowed < 7){
             defWeekTotal += 8
