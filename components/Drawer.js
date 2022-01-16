@@ -28,7 +28,7 @@ export default function TemporaryDrawer({ session }) {
 
     setState({ ...state, [anchor]: open });
   };
-  const links = ['/', '/team-builder', '/league-view', '/all-stats']
+  const links = ['/', '/team-builder', '/league-view', '/detailed-stats', 'kicker-stats', '/defense-stats']
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -37,7 +37,7 @@ export default function TemporaryDrawer({ session }) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Team View', 'Team Builder', 'League View', 'All Stats'].map((text, index) => (
+        {['Team View', 'Team Builder', 'League View', 'Offensive Stats', 'Kicker Stats', 'Defensive Stats'].map((text, index) => (
           <ListItem button key={text}>
             
             <ListItemText primary={text} onClick={() => router.push(links[index])} />
