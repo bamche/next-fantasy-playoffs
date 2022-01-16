@@ -67,7 +67,7 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-export default function defenseStats(){
+export default function defenseStats({ session }){
   const [rows, setRows] = useState([])
  
   useEffect(() =>{
@@ -175,3 +175,12 @@ export default function defenseStats(){
   );
 };
 
+export async function getServerSideProps(context) {
+  const sessionUser = await getSession(context);
+
+  return {
+    props: {
+      session: sessionUser,
+    },
+  };
+}
