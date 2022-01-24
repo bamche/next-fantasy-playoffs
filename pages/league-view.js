@@ -209,11 +209,11 @@ export default function LeagueView({ session }){
         
       });
       //sum up each week total for overall total
-      teamObject.week1 = Number((teamObject.week1).toFixed(2));
-      teamObject.week2 = Number((teamObject.week2).toFixed(2));
+      teamObject.week1 = Number((teamObject.week1).toFixed(2)); 
+      teamObject.week2 = Number((teamObject.week2).toFixed(2)); 
       teamObject.week3 = Number((teamObject.week3).toFixed(2));
       teamObject.week4 = Number((teamObject.week4).toFixed(2));
-      teamObject.total = (teamObject.week1 + teamObject.week2 + teamObject.week3 + teamObject.week4)//.toFixed(2);
+      teamObject.total =  Number((teamObject.week1 + teamObject.week2 + teamObject.week3 + teamObject.week4).toFixed(2)); 
       tempRows.push(teamObject);
       teamID++;
     };
