@@ -107,7 +107,7 @@ export default function defenseStats({ session }){
       weeks.forEach( week => {
         //score tally for each week
         let weekTotal = 0;
-
+        const superBowlFactor =  week === 4 ? 1.5 : 1;
         defStatRecords.forEach( (stat, id) => {
 
           //add up each stat week by week to condense to a total
@@ -122,23 +122,23 @@ export default function defenseStats({ session }){
           } 
             else if(pointsAllowed === 0 ){
             weekTotal += 12;
-            playerObject.pts_allowed += 12;
+            playerObject.pts_allowed += 12*superBowlFactor;
           } else if(pointsAllowed < 7){
             weekTotal += 8;
-            playerObject.pts_allowed += 8;
+            playerObject.pts_allowed += 8*superBowlFactor;
           } else if(pointsAllowed < 11){
             weekTotal += 5
-            playerObject.pts_allowed += 5;
+            playerObject.pts_allowed += 5*superBowlFactor;
           } else if( pointsAllowed < 18) {
             weekTotal += 2;
-            playerObject.pts_allowed += 2;
+            playerObject.pts_allowed += 2*superBowlFactor;
           
           }
         
         } else{
           if(playerObject[stat] !== undefined) playerObject[stat] += ele[stat+week];
           else playerObject[stat] = ele[stat+week];
-          weekTotal += ele[stat+week]*(defStatRecordPoints[id])
+          weekTotal += ele[stat+week]*(defStatRecordPoints[id])*superBowlFactor
         }})
 
         //add to overall total
