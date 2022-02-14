@@ -97,12 +97,13 @@ export default function KickerStats({ session }){
       weeks.forEach( week => {
         //score tally for each week
         let weekTotal = 0;
+        const superBowlFactor =  week === 4 ? 1.5 : 1;
 
         offStatRecords.forEach( (stat, id) => {
           //add up each stat week by week to condense to a total
           if(playerObject[stat] !== undefined) playerObject[stat] += ele[stat+week];
           else playerObject[stat] = ele[stat+week];
-          weekTotal += ele[stat+week]*(offStatRecordPoints[id])
+          weekTotal += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor
         })
 
         //add to overall total
