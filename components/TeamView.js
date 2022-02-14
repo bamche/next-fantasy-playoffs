@@ -111,7 +111,7 @@ function TeamView({ session }){
     weeks.forEach( week => {
       // defensive score tally for each week
       let defWeekTotal = 0;
-
+      const superBowlFactor =  week === 4 ? 1.5 : 1;
       defStatRecords.forEach( (stat, id) => {
         defObject[stat+week] = defStats[stat+week];
 
@@ -122,17 +122,17 @@ function TeamView({ session }){
             defWeekTotal += 0
           } 
             else if(pointsAllowed === 0 ){
-            defWeekTotal += 12
+            defWeekTotal += 12*superBowlFactor
           } else if(pointsAllowed < 7){
-            defWeekTotal += 8
+            defWeekTotal += 8*superBowlFactor
           } else if(pointsAllowed < 11){
-            defWeekTotal += 5
+            defWeekTotal += 5*superBowlFactor
           } else if( pointsAllowed < 18) {
-            defWeekTotal += 2  //NOTE CHANGE FROM PREVIOUS SEASON
+            defWeekTotal += 2*superBowlFactor  //NOTE CHANGE FROM PREVIOUS SEASON
           }
         
         } else{
-          defWeekTotal += defStats[stat+week]*(defStatRecordPoints[id])
+          defWeekTotal += defStats[stat+week]*(defStatRecordPoints[id])*superBowlFactor
         }
       });
       
@@ -170,10 +170,10 @@ function TeamView({ session }){
       weeks.forEach( week => {
         //score tally for each week
         let weekTotal = 0;
-
+        const superBowlFactor =  week === 4 ? 1.5 : 1;
         offStatRecords.forEach( (stat, id) => {
           playerObject[stat+week] = ele[stat+week];
-          weekTotal += ele[stat+week]*(offStatRecordPoints[id])
+          weekTotal += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor
         })
 
         //write field for individual week total then add to overall total
