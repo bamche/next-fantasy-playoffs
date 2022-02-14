@@ -151,8 +151,10 @@ export default function LeagueView({ session }){
       ];
 
       weeks.forEach( week => {
+        const superBowlFactor =  week === 4 ? 1.5 : 1
         defStatRecords.forEach( (stat, id) => {
           
+
           //allow for points allowed scoring logic
           if(id === 5) {
             const pointsAllowed = defStats[stat+week];
@@ -160,17 +162,17 @@ export default function LeagueView({ session }){
               teamObject['week'+ week] += 0
             } 
               else if(pointsAllowed === 0 ){
-              teamObject['week'+ week] += 12
+              teamObject['week'+ week] += (12 * superBowlFactor)
             } else if(pointsAllowed < 7){
-              teamObject['week'+ week] += 8
+              teamObject['week'+ week] += (8 * superBowlFactor)
             } else if(pointsAllowed < 11){
-              teamObject['week'+ week] += 5
+              teamObject['week'+ week] += (5 * superBowlFactor)
             } else if( pointsAllowed < 18) {
-              teamObject['week'+ week] += 2  //NOTE CHANGE FROM PREVIOUS SEASON
+              teamObject['week'+ week] += (2 * superBowlFactor)  //NOTE CHANGE FROM PREVIOUS SEASON
             }
           
           } else{
-            teamObject['week'+ week] += defStats[stat+week]*(defStatRecordPoints[id])
+            teamObject['week'+ week] += defStats[stat+week]*(defStatRecordPoints[id]) * superBowlFactor
           }
           
         });
@@ -180,6 +182,7 @@ export default function LeagueView({ session }){
       
       //process offensive information from database and calculate scores
       offStats.forEach( (ele, id) => {
+        
         
         //since we have ordered data on backend we can use id to match correctly with position list
         teamObject[positionList[id]] = ele.player_name;
@@ -199,10 +202,10 @@ export default function LeagueView({ session }){
         
         //iterate through all weeks
         weeks.forEach( week => {
-
+          const superBowlFactor =  week === 4 ? 1.5 : 1
           //iterate through each stat multiplying by point value and adding to week total
           offStatRecords.forEach( (stat, id) => {
-            teamObject['week'+ week] += ele[stat+week]*(offStatRecordPoints[id]);
+            teamObject['week'+ week] += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor;
           });
           
         });
