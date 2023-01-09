@@ -54,7 +54,7 @@ function Login(){
                         NFL Playoff Challenge 2022
                     </Typography>
                     <form className={classes.form} noValidate >
-                    <Link href="/login">
+                    <Link href="/api/auth/signin">
                       <Button
                       type="submit"
                       fullWidth

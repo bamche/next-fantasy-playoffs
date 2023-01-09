@@ -44,8 +44,8 @@ export default function Login({ csrfToken }){
     const handleSignup = async () => {
         console.log(email)         
         console.log('csrf', csrfToken)      
-        router.push(`/verification`)
-        await axios.post('/api/auth/signin/email', { email, csrfToken })
+        router.push(`/api/auth/signin`)
+        // await axios.post('api/auth/callback/google', { email, csrfToken })
         // console.log(response)
     };
      
