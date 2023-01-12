@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect } from 'react';
-import { Provider } from 'next-auth/client';
+import React, { Fragment } from 'react';
+import { SessionProvider } from 'next-auth/react';
 import { useRouter } from 'next/router';
 // import PropTypes from 'prop-types';
 import Head from 'next/head';
@@ -21,7 +21,7 @@ function MyApp(props) {
         <title>NFL Playoff Challenge</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-        <Provider session={pageProps.session}>
+        <SessionProvider session={pageProps.session}>
           <AppBar position="relative">
             <Toolbar>
               <Drawer router={router} session={pageProps.session}/>
@@ -33,9 +33,7 @@ function MyApp(props) {
           </AppBar>     
           <CssBaseline />
           <Component {...pageProps} />
-        </Provider>
-        
-      {/* </ThemeProvider> */}
+        </SessionProvider>
     </Fragment>
   );
 }

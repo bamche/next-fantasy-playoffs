@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 const columns = [
   {
