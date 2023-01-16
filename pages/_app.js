@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 function MyApp(props) {
   const router = useRouter();
   const { Component, pageProps } = props;
+  pageProps.timeCutoff = '14 Jan 2023 21:31:00 GMT';
   
   return (
     <Fragment>

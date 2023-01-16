@@ -99,8 +99,9 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-export default function LeagueView({ session }){
-  const startTime = Date.parse('15 Jan 2022 21:31:00 GMT'); 
+export default function LeagueView({ session, timeCutoff }){
+  const startTimeDate = new Date(timeCutoff);
+  const startTime = Date.parse(timeCutoff); 
   const now = Date.now();
   const email = session.user.email;
   const [rows, setRows] = useState([])
@@ -228,7 +229,7 @@ export default function LeagueView({ session }){
     <div > 
       <h1> Leader Board </h1>
       {now < startTime && (
-        <h2> *** Leader Board available after Jan 15 - 1:30pm PT***</h2>
+        <h2> *** Leader Board available after {startTimeDate.toLocaleString()} ***</h2>
       )}
       <div style={{ height: 700, width: '100%' }}>
       <DataGrid
