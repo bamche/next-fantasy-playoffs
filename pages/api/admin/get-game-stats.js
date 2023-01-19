@@ -20,7 +20,7 @@ export default async function getGameStats(req, res) {
         const playerStats = processPlayerStats(gameStatsData.data, week);
     
         const playerStatsLog = updateDBPlayerStats(week, playerStats);
-        const defenseStatsLog = pdatDBDefenseStats(week, defenseStats);
+        const defenseStatsLog = updatDBDefenseStats(week, defenseStats);
 
         res.status(200).send({ playerStatsLog, defenseStatsLog });
     } catch(e){
@@ -42,8 +42,7 @@ async function processDefenseStats(data, week) {
     homeStats.push(...sortDefense(home, superBowlFactor));
 
     //results are returned like this since every game has an away and home team, and stats are updated per game
-    const defenseStats = [awayStats, homeStats];
-    await updatDBDefenseStats(week, defenseStats);
+    return defenseStats = [awayStats, homeStats];
 }
 
 function processPlayerStats(data, week) {
