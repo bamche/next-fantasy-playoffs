@@ -8,15 +8,11 @@ export default function Home({ session, csrfToken }) {
 }
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
-  // const csrfToken = await getCsrfToken(context);
-  // console.log("CRSF TOKENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", csrfToken)
-  
+  const sessionUser = await getSession(context);  
   
   return {
     props: {
       session: sessionUser,
-      // csrfToken: csrfToken,
     },
   };
 }

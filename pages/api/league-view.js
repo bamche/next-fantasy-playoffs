@@ -1,4 +1,5 @@
 import db from '../../lib/playerDataModels'
+import ProcessLeagueView from '../../utils/ProcessLeagueView';
 
 export default async function leagueView (req, res) {
 
@@ -39,9 +40,10 @@ export default async function leagueView (req, res) {
     const defStats =  (await db.query(defQueryString)).rows[0];
     leagueStats[email.email]['defense'] = defStats
     };
+    
+    const processedLeagueStats = ProcessLeagueView(leagueStats);
   
-  
-    res.status(200).send({ leagueStats })
+    res.status(200).send({ processedLeagueStats })
   
   } catch(e) {
     console.log(`league-view api error (fetching all team scoring/player data):  ${e}`);
