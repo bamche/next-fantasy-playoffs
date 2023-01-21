@@ -1,8 +1,9 @@
 const axios = require('axios');
 const format = require('pg-format');
+import db from '../../../lib/playerDataModels'
 
 export default async function getPlayerList(req, res) {
-    const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64')
+    const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64');
 
     const headers = {
         'Authorization': `Basic ${token}`

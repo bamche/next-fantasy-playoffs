@@ -80,44 +80,29 @@ export default function KickerStats({ session }){
       playerObject.name = ele.player_name;
       playerObject.position = ele.position;
       playerObject.team = ele.nfl_team;
-
+      playerObject.total_score = 0;
       
       //name of individual offensive stats
-      const offStatRecords = ['fg30', 'fg40', 'fg50', 'xtpm']
-      
-      //individual value of stats
-      const offStatRecordPoints = [
-        3, 4, 5, 1
-      ];
+      const offStatRecords = ['fg30', 'fg40', 'fg50', 'xtpm'];
 
-      //temporary value to hold scores through iteration
-      let total = 0;
-      
       //iterate through all weeks for total
       weeks.forEach( week => {
-        //score tally for each week
-        let weekTotal = 0;
-        const superBowlFactor =  week === 4 ? 1.5 : 1;
-
         offStatRecords.forEach( (stat, id) => {
           //add up each stat week by week to condense to a total
-          if(playerObject[stat] !== undefined) playerObject[stat] += ele[stat+week];
-          else playerObject[stat] = ele[stat+week];
-          weekTotal += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor
+          if (playerObject[stat] !== undefined) {
+            playerObject[stat] += ele[stat+week];
+          } else {
+            playerObject[stat] = ele[stat+week];
+          }
         })
 
         //add to overall total
-        total += weekTotal;
+        playerObject.total_score += parseFloat(ele[`points${week}`]) || 0;;
       })
-
-      playerObject.total_score = total; 
       tempRows.push(playerObject)
       
-    })
-    
+    })   
     setRows(tempRows);
-    
-    
   };
   fetchPlayer();
 }, []);

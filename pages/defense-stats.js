@@ -76,7 +76,7 @@ export default function defenseStats({ session }){
     const tempRows = []
     const stats = await axios.get('/api/defense-stats');
     const defStats = stats.data.defenseStats;
-    const weeks = [1,2,3,4]
+    const weeks = [1,2,3,4];
     
     //process offensive information from database and calculate scores
     defStats.forEach( (ele, id) => {
@@ -95,10 +95,6 @@ export default function defenseStats({ session }){
         'pts_allowed'
       ];
       
-      //defensive stats point value, x is placeholder
-      const defStatRecordPoints = [
-        1, 2, 2, 5, 6, 'X'
-      ];
 
       //temporary value to hold scores through iteration
       let total = 0;
@@ -136,13 +132,15 @@ export default function defenseStats({ session }){
           }
         
         } else{
-          if(playerObject[stat] !== undefined) playerObject[stat] += ele[stat+week];
-          else playerObject[stat] = ele[stat+week];
-          weekTotal += ele[stat+week]*(defStatRecordPoints[id])*superBowlFactor
+          if (playerObject[stat] !== undefined) {
+            playerObject[stat] += ele[stat+week];
+          } else {
+            playerObject[stat] = ele[stat+week];
+          }
         }})
 
         //add to overall total
-        total += weekTotal;
+        total += parseFloat(ele[`points${week}`]) || 0;
       })
 
       playerObject.total_score = total; 

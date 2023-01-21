@@ -50,7 +50,7 @@ export default function TeamBuilder({ session, timeCutoff }) {
   }
 
   const submitTeam = async () => {
-    //block new submissions after deadline
+    // block new submissions after deadline
     if(now > startTime) {
       setAfterTimeWarning(true);
       return;

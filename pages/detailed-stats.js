@@ -119,8 +119,7 @@ export default function OffenseStats({ session }){
     const stats = await axios.get('/api/detailed-stats');
     const playerStats = stats.data.offensePlayerStats;
     
-    const weeks = [1,2,3,4]
-
+    const weeks = [1,2,3,4];
 
     //process offensive information from database and calculate scores
     playerStats.forEach( (ele, id) => {
@@ -130,11 +129,11 @@ export default function OffenseStats({ session }){
       playerObject.name = ele.player_name;
       playerObject.position = ele.position;
       playerObject.team = ele.nfl_team;
-
+      playerObject.total_score = 0; 
       
       //name of individual offensive stats
       const offStatRecords = ['pass_yd', 'pass_td', 'interception', 'rush_yd', 'rush_td',
-      'rec_yd', 'rec_td', 'rec', 'te_rec', 'two_pt']
+      'rec_yd', 'rec_td', 'rec', 'te_rec', 'two_pt'];
       
       //individual value of stats
       const offStatRecordPoints = [
@@ -147,29 +146,22 @@ export default function OffenseStats({ session }){
       
       //iterate through all weeks for total
       weeks.forEach( week => {
-        //score tally for each week
-        let weekTotal = 0;
-        const superBowlFactor =  week === 4 ? 1.5 : 1;
-
         offStatRecords.forEach( (stat, id) => {
           //add up each stat week by week to condense to a total
-          if(playerObject[stat] !== undefined) playerObject[stat] += ele[stat+week];
-          else playerObject[stat] = ele[stat+week];
-          weekTotal += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor
+          if (playerObject[stat] !== undefined) {
+            playerObject[stat] += ele[stat+week];
+          } else {
+            playerObject[stat] = ele[stat+week];
+          }
         })
 
         //add to overall total
-        total += weekTotal;
+        playerObject.total_score += parseFloat(ele[`points${week}`]) || 0;
       })
-
-      playerObject.total_score = total; 
       tempRows.push(playerObject)
       
     })
-    
     setRows(tempRows);
-    
-    
   };
   fetchPlayer();
 }, []);

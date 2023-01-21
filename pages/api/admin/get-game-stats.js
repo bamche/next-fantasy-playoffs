@@ -1,8 +1,16 @@
 const axios = require('axios');
 const format = require('pg-format');
+import db from '../../../lib/playerDataModels';
 
 export default async function getGameStats(req, res) {
     const week = req.query.week;    
+    if (req.key !== process.env.API_KEY) {
+        throw new Error("Unauthorized");
+    }
+    const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64');
+    const headers = {
+        'Authorization': `Basic ${token}`
+    }
     const url = process.env.GAME_URL + `${req.query.gameID}/boxscore.json`;
     const parameters ={
         url,
@@ -11,7 +19,7 @@ export default async function getGameStats(req, res) {
     };
 
     try{
-        if (week != "1" || week != '2' || week != '3' || week != '4') {
+        if (week != '1' && week != '2' && week != '3' && week != '4') {
             throw new Error("Incorrect week format");
         } 
         const gameStatsData = await axios(parameters);
@@ -30,7 +38,7 @@ export default async function getGameStats(req, res) {
     
 };
 
-async function processDefenseStats(data, week) {
+function processDefenseStats(data, week) {
     const superBowlFactor =  week === 4 ? 1.5 : 1;    
     const awayStats = [data.game.awayTeam.id];
     const homeStats = [data.game.homeTeam.id];
@@ -40,9 +48,8 @@ async function processDefenseStats(data, week) {
 
     awayStats.push(...sortDefense(away, superBowlFactor));
     homeStats.push(...sortDefense(home, superBowlFactor));
-
     //results are returned like this since every game has an away and home team, and stats are updated per game
-    return defenseStats = [awayStats, homeStats];
+    return [awayStats, homeStats];
 }
 
 function processPlayerStats(data, week) {
@@ -123,7 +130,7 @@ async function updateDBPlayerStats(week, playerStats) {
 async function updatDBDefenseStats(week, defenseStats) {
     try{
         const SQLQueryString = `INSERT INTO public.def_list 
-          (def_id,	sack${week},	turnover${week},	block_ret${week},	sfty${week},	td${week},	pts_allowed${week}, points${week}) 
+          (def_id, sack${week},	turnover${week}, block_ret${week}, sfty${week},	td${week}, pts_allowed${week}, points${week}) 
           VALUES %L 
           ON CONFLICT (def_id) 
           DO UPDATE 
@@ -145,15 +152,17 @@ async function updatDBDefenseStats(week, defenseStats) {
 
 function calculatePointsAllowedScore (pointsAllowed) {
     if(pointsAllowed === null){
-      return 0;
+        return 0;
     } else if(pointsAllowed === 0 ){
-      return 12;
+        return 12;
     } else if(pointsAllowed < 7){
-      return 8;
+        return 8;
     } else if(pointsAllowed < 11){
-      return 5;
+        return 5;
     } else if( pointsAllowed < 18) {
-      return 2;
+        return 2;
+    } else {
+        return 0;
     }
 }
 

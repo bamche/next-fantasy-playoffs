@@ -108,108 +108,42 @@ export default function LeagueView({ session, timeCutoff }){
 
   useEffect(() =>{
   const fetchPlayer = async () => {
-    if(now < startTime) return;
+    if (now < startTime) return;
 
-    const tempRows = []
+    const tempRows = [];
     const stats = await axios.get('/api/league-view');
     const leagueStats = stats.data.leagueStats;
 
     let teamID = 0
-    for( const [email, stats] of Object.entries(leagueStats)){
+    for ( const [email, stats] of Object.entries(leagueStats)) {
 
       const teamObject = {};
-      
-      //score totals for each week
-      teamObject.week1 = 0;
-      teamObject.week2 = 0;
-      teamObject.week3 = 0;
-      teamObject.week4 = 0;
-
       const defStats = stats.defense;
       const offStats = stats.offense;
 
-      const weeks = [1,2,3,4]
-
-      //process offensive information from database and calculate scores
-      
+      //write properties to to teamobject - which is used by table to display stats
+      teamObject.week1 = parseFloat(defStats[`points${1}`]) || 0;
+      teamObject.week2 = parseFloat(defStats[`points${2}`]) || 0;
+      teamObject.week3 = parseFloat(defStats[`points${3}`]) || 0;
+      teamObject.week4 = parseFloat(defStats[`points${4}`]) || 0;      
       teamObject.id = teamID;
       teamObject.email = email;
       teamObject.dst = defStats.nfl_team;
 
-      //name of individual defensive stats
-      const defStatRecords = [
-        'sack',
-        'turnover',
-        'block_ret',
-        'sfty',
-        'td',
-        'pts_allowed'
-      ];
+      const weeks = [1,2,3,4];
 
-      //defensive stats point value, x is placeholder
-      const defStatRecordPoints = [
-        1, 2, 2, 5, 6, 'X'
-      ];
-
-      weeks.forEach( week => {
-        const superBowlFactor =  week === 4 ? 1.5 : 1
-        defStatRecords.forEach( (stat, id) => {
-          
-
-          //allow for points allowed scoring logic
-          if(id === 5) {
-            const pointsAllowed = defStats[stat+week];
-            if(pointsAllowed === null){
-              teamObject['week'+ week] += 0
-            } 
-              else if(pointsAllowed === 0 ){
-              teamObject['week'+ week] += (12 * superBowlFactor)
-            } else if(pointsAllowed < 7){
-              teamObject['week'+ week] += (8 * superBowlFactor)
-            } else if(pointsAllowed < 11){
-              teamObject['week'+ week] += (5 * superBowlFactor)
-            } else if( pointsAllowed < 18) {
-              teamObject['week'+ week] += (2 * superBowlFactor)  //NOTE CHANGE FROM PREVIOUS SEASON
-            }
-          
-          } else{
-            teamObject['week'+ week] += defStats[stat+week]*(defStatRecordPoints[id]) * superBowlFactor
-          }
-          
-        });
-      });
       //array to handle position tags to match with columns
       const positionList = ['qb', 'rb1', 'rb2', 'wr1', 'wr2', 'te', 'flex1', 'flex2', 'flex3', 'flex4', 'k', 'dst']
       
       //process offensive information from database and calculate scores
-      offStats.forEach( (ele, id) => {
-        
-        
+      offStats.forEach( (ele, id) => {      
         //since we have ordered data on backend we can use id to match correctly with position list
         teamObject[positionList[id]] = ele.player_name;
-                
-        //name of individual offensive stats
-        const offStatRecords = ['pass_yd', 'pass_td', 'interception', 'rush_yd', 'rush_td',
-        'rec_yd', 'rec_td', 'rec', 'te_rec', 'two_pt', 'fg30', 'fg40', 'fg50', 'xtpm']
-        
-        //individual value of stats
-        const offStatRecordPoints = [
-          0.025, 4, -2, 0.1, 6,
-          .1, 6, 1, 1.5, 2, 3, 4, 5, 1
-        ];
-
-        //temporary value to hold scores through iteration
-        let total = 0;
         
         //iterate through all weeks
         weeks.forEach( week => {
-          const superBowlFactor =  week === 4 ? 1.5 : 1
-          //iterate through each stat multiplying by point value and adding to week total
-          offStatRecords.forEach( (stat, id) => {
-            teamObject['week'+ week] += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor;
+          teamObject[`week${week}`] += parseFloat(ele[`points${week}`]) || 0;
           });
-          
-        });
         
       });
       //sum up each week total for overall total
