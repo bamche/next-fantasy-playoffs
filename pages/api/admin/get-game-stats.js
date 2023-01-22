@@ -4,7 +4,7 @@ import db from '../../../lib/playerDataModels';
 
 export default async function getGameStats(req, res) {
     const week = req.query.week;    
-    if (req.key !== process.env.API_KEY) {
+    if (req.query.key !== process.env.API_KEY) {
         throw new Error("Unauthorized");
     }
     const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64');
