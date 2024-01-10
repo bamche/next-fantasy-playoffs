@@ -107,13 +107,54 @@ export default function LeagueView({ session, timeCutoff }){
     const [rows, setRows] = useState([])
 
   useEffect(() =>{
-    const fetchPlayer = async () => {
-      if(now < startTime) return;
 
-      const statsRespose = await axios.get('/api/league-view');
-      const leagueStats = statsRespose.data.processedLeagueStats;
-      setRows(leagueStats);
+  const fetchPlayer = async () => {
+    if (now < startTime) return;
 
+    const tempRows = [];
+    const stats = await axios.get('/api/league-view');
+    const leagueStats = stats.data.leagueStats;
+
+    let teamID = 0
+    for ( const [email, stats] of Object.entries(leagueStats)) {
+
+      const teamObject = {};
+      const defStats = stats.defense;
+      const offStats = stats.offense;
+
+      //write properties to to teamobject - which is used by table to display stats
+      teamObject.week1 = parseFloat(defStats[`points${1}`]) || 0;
+      teamObject.week2 = parseFloat(defStats[`points${2}`]) || 0;
+      teamObject.week3 = parseFloat(defStats[`points${3}`]) || 0;
+      teamObject.week4 = parseFloat(defStats[`points${4}`]) || 0;      
+      teamObject.id = teamID;
+      teamObject.email = email;
+      teamObject.dst = defStats.nfl_team;
+
+      const weeks = [1,2,3,4];
+
+      //array to handle position tags to match with columns
+      const positionList = ['qb', 'rb1', 'rb2', 'wr1', 'wr2', 'te', 'flex1', 'flex2', 'flex3', 'flex4', 'k', 'dst']
+      
+      //process offensive information from database and calculate scores
+      offStats.forEach( (ele, id) => {      
+        //since we have ordered data on backend we can use id to match correctly with position list
+        teamObject[positionList[id]] = ele.player_name;
+        
+        //iterate through all weeks
+        weeks.forEach( week => {
+          teamObject[`week${week}`] += parseFloat(ele[`points${week}`]) || 0;
+          });
+        
+      });
+      //sum up each week total for overall total
+      teamObject.week1 = Number((teamObject.week1).toFixed(2)); 
+      teamObject.week2 = Number((teamObject.week2).toFixed(2)); 
+      teamObject.week3 = Number((teamObject.week3).toFixed(2));
+      teamObject.week4 = Number((teamObject.week4).toFixed(2));
+      teamObject.total =  Number((teamObject.week1 + teamObject.week2 + teamObject.week3 + teamObject.week4).toFixed(2)); 
+      tempRows.push(teamObject);
+      teamID++;
     };
   fetchPlayer();
 }, []);

@@ -17,8 +17,6 @@ CREATE TABLE "user_list" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "player_list" (
 	"player_id" integer NOT NULL,
 	"player_name" varchar,
@@ -80,6 +78,10 @@ CREATE TABLE "player_list" (
 	"fg404" integer,
 	"fg504" integer,
 	"xtpm4" integer,
+	"points1" decimal,
+	"points2" decimal,
+	"points3" decimal,
+	"points4" decimal,
 	CONSTRAINT "player_list_pk" PRIMARY KEY ("player_id")
 ) WITH (
   OIDS=FALSE
@@ -114,6 +116,10 @@ CREATE TABLE "def_list" (
 	"sfty4" integer,
 	"td4" integer,
 	"pts_allowed4" integer,
+	"points1" decimal,
+	"points2" decimal,
+	"points3" decimal,
+	"points4" decimal,
 	CONSTRAINT "def_list_pk" PRIMARY KEY ("def_id")
 ) WITH (
   OIDS=FALSE
