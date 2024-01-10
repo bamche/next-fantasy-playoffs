@@ -68,11 +68,12 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-export default function defenseStats({ session }){
+export default function defenseStats(){
   const [rows, setRows] = useState([])
  
   useEffect(() =>{
   const fetchPlayer = async () => {
+
     const tempRows = []
     const stats = await axios.get('/api/defense-stats');
     const defStats = stats.data.defenseStats;

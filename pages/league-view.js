@@ -100,13 +100,14 @@ columns.forEach(ele => {
 })
 
 export default function LeagueView({ session, timeCutoff }){
-  const startTimeDate = new Date(timeCutoff);
-  const startTime = Date.parse(timeCutoff); 
-  const now = Date.now();
-  const email = session.user.email;
-  const [rows, setRows] = useState([])
+    const startTimeDate = new Date(timeCutoff);
+    const startTime = Date.parse(timeCutoff); 
+    const now = Date.now();
+    const email = session.user.email;
+    const [rows, setRows] = useState([])
 
   useEffect(() =>{
+
   const fetchPlayer = async () => {
     if (now < startTime) return;
 
@@ -155,8 +156,6 @@ export default function LeagueView({ session, timeCutoff }){
       tempRows.push(teamObject);
       teamID++;
     };
-    setRows(tempRows);
-  };
   fetchPlayer();
 }, []);
   return(

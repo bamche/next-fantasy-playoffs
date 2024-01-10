@@ -1,4 +1,5 @@
-import db from '../../lib/playerDataModels'
+import db from '../../lib/playerDataModels';
+import ProcessTeamView from '../../utils/ProcessTeamView';
 
 export default async function playerStats(req, res) {
   const { email } = req.query;
@@ -25,8 +26,8 @@ export default async function playerStats(req, res) {
     //pull defense stats
     const defQueryString = `SELECT * FROM public.def_list WHERE def_id= ${playerIDList[playerIDList.length-1]}; `
     const defStats =  (await db.query(defQueryString)).rows[0];
-        
-    res.status(200).send({ playerStats, defStats })
+    const teamViewStats = ProcessTeamView(playerStats, defStats);
+    res.status(200).send({ teamViewStats })
 
   } catch(e) {
     console.log(`player-stats api error (fetching all players):  ${e}`);

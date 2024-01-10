@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { getSession } from 'next-auth/react';
+import { positionList, defStatRecords, defStatRecordPoints, offStatRecords, offStatRecordPoints} from "../utils/constants";
 
 const columns = [
 
@@ -119,6 +120,7 @@ export default function OffenseStats({ session }){
     const stats = await axios.get('/api/detailed-stats');
     const playerStats = stats.data.offensePlayerStats;
     
+
     const weeks = [1,2,3,4];
 
     //process offensive information from database and calculate scores
@@ -140,6 +142,7 @@ export default function OffenseStats({ session }){
         0.025, 4, -2, 0.1, 6,
         .1, 6, 1, 1.5, 2
       ];
+
 
       //temporary value to hold scores through iteration
       let total = 0;
