@@ -100,12 +100,12 @@ export default function TeamBuilder({ session, timeCutoff }) {
   
   //logic to search for players in drop down list
   const filter = e => {
-    const keyword = e.target.value;
+    const keyword = e.target.value.trim();
 
     if(keyword !== ''){
+      const keywords = keyword.split(' ');
       let filteredPlayers = playerList.filter(player => {
-        return player[1].toLowerCase().includes(keyword.toLowerCase())
-
+        return keywords.every(keyword => player[1].toLowerCase().includes(keyword.toLowerCase()));
     }) 
     setFoundPlayers(filteredPlayers);
     } else {
