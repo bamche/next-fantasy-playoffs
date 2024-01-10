@@ -3,7 +3,7 @@ const format = require('pg-format');
 import db from '../../../lib/playerDataModels';
 
 export default async function getGameStats(req, res) {
-    const week = req.query.week;    
+    const week = req.query.week;
     if (req.query.key !== process.env.API_KEY) {
         throw new Error("Unauthorized");
     }

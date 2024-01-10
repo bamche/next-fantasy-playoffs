@@ -9,8 +9,8 @@ export default async function getPlayerList(req, res) {
         'Authorization': `Basic ${token}`
     }
     const baseURL = process.env.PLAYERS_URL;
-    const season = '2022-2023-regular';
-    const team = 'buf,tb,kc,cin,sf,phi,dal,sea,nyg,lac,min,mia,jax,bal';
+    const season = '2023-2024-regular';
+    const team = 'buf,tb,kc,pit,sf,phi,dal,lar,hou,cle,gb,mia,det,bal';
     const position = 'qb,rb,wr,te,k';
     
     const url = baseURL + `?season=${season}&team=${team}&position=${position}`;
