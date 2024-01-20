@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import GetLeagueView from '../utils/GetLeagueView'
 
 const columns = [
   {
@@ -99,24 +100,12 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-export default function LeagueView({ session, timeCutoff }){
+export default function LeagueView({ session, timeCutoff, leagueStats }){
     const startTimeDate = new Date(timeCutoff);
     const startTime = Date.parse(timeCutoff); 
     const now = Date.now();
     const email = session.user.email;
-    const [rows, setRows] = useState([])
 
-  useEffect(() =>{
-    const fetchPlayer = async () => {
-      if(now < startTime) return;
-
-      const statsRespose = await axios.get('/api/league-view');
-      const leagueStats = statsRespose.data.processedLeagueStats;
-      setRows(leagueStats);
-
-    };
-  fetchPlayer();
-}, []);
   return(
     <div > 
       <h1> Leader Board </h1>
@@ -125,7 +114,7 @@ export default function LeagueView({ session, timeCutoff }){
       )}
       <div style={{ height: 700, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        rows={leagueStats}
         columns={columns}
         // pageSize={18}
         density={'compact'}
@@ -141,10 +130,11 @@ export default function LeagueView({ session, timeCutoff }){
 
 export async function getServerSideProps(context) {
   const sessionUser = await getSession(context);
-
+  const leagueStats = await GetLeagueView();
   return {
     props: {
       session: sessionUser,
+      leagueStats,
     },
   };
 }
