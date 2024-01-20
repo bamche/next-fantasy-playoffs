@@ -23,7 +23,11 @@ export default async function getGameStats(req, res) {
             throw new Error("Incorrect week format");
         } 
         const gameStatsData = await axios(parameters);
-
+        await determineLoser(
+            gameStatsData.data.game.homeTeam, 
+            gameStatsData.data.game.awayTeam, 
+            gameStatsData.data.scoring.homeScoreTotal, 
+            gameStatsData.data.scoring.awayScoreTotal);
         const defenseStats = processDefenseStats(gameStatsData.data, week);
         const playerStats = processPlayerStats(gameStatsData.data, week);
 
@@ -178,4 +182,13 @@ function sortDefense(team, superBowlFactor) {
 
     return [sacks, turnovers, blocks, safeties, touchdowns, pointsAllowed, points];
 
+}
+
+async function determineLoser(homeTeam, awayTeam, homeScore, awayScore) {
+    const loser = homeScore > awayScore ? awayTeam : homeTeam;
+
+    const queryString = `UPDATE public.eliminated_teams
+                        SET eliminated = true
+                        WHERE team_id = ${loser.id};`
+    await db.query(queryString);
 }

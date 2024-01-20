@@ -80,6 +80,10 @@ CREATE TABLE "player_list" (
 	"fg404" integer,
 	"fg504" integer,
 	"xtpm4" integer,
+	"points1" decimal,
+	"points2" decimal,
+	"points3" decimal,
+	"points4" decimal,
 	CONSTRAINT "player_list_pk" PRIMARY KEY ("player_id")
 ) WITH (
   OIDS=FALSE
@@ -119,6 +123,12 @@ CREATE TABLE "def_list" (
   OIDS=FALSE
 );
 
+CREATE TABLE "eliminated_teams" (
+    "team_id" integer not null,
+    "nfl_team" VARCHAR NOT NULL,
+    "eliminated" BOOLEAN DEFAULT false NOT NULL,
+    CONSTRAINT "eliminated_teams_pk" PRIMARY KEY ("team_id")
+);
 
 
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk0" FOREIGN KEY ("qb") REFERENCES "player_list"("player_id");

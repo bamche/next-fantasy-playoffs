@@ -66,11 +66,8 @@ export default function ProcessLeagueView(leagueStats) {
         
         //iterate through all weeks
         weeks.forEach( week => {
-        const superBowlFactor =  week === 4 ? 1.5 : 1
-        //iterate through each stat multiplying by point value and adding to week total
-        offStatRecords.forEach( (stat, id) => {
-            teamObject['week'+ week] += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor;
-        });
+            const weekScore = ele['points' + week] ?? 0;
+            teamObject['week'+ week] += parseFloat(weekScore);
         
         });
         
