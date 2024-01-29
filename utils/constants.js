@@ -21,11 +21,31 @@ export const offStatRecords = ['pass_yd', 'pass_td', 'interception', 'rush_yd', 
 'rec_yd', 'rec_td', 'rec', 'te_rec', 'two_pt', 'fg30', 'fg40', 'fg50', 'xtpm']
 
 //individual value of stats
-export const offStatRecordPoints = [
-    0.025, 4, -2, 0.1, 6,
-    .1, 6, 1, 1.5, 2, 3, 4, 5, 1
-];
+export const offStatRecordPoints  = {
+  'pass_yd': 0.04,
+  'pass_td': 4,
+  'interception': -2,
+  'rush_yd': 0.1,
+  'rush_td': 6,
+  'rec_yd': 0.1,
+  'rec_td': 6,
+  'rec': 1,
+  'te_rec': 1.5,
+  'two_pt': 2,
+  'fg30': 3,
+  'fg40': 4,
+  'fg50': 5,
+  'xtpm': 1
+};
 
+
+export const kickerStatRecordPoints = 
+  {
+    'fg30': 3,
+    'fg40': 4,
+    'fg50': 5,
+    'xtpm': 1
+  };
 
 
 export const remainingDefQuery = `

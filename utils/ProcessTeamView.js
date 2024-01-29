@@ -1,4 +1,4 @@
-import { defStatRecords, defStatRecordPoints, offStatRecords, offStatRecordPoints} from "./constants";
+import { defStatRecords, defStatRecordPoints, offStatRecordPoints} from "./constants";
 
 export default function ProcessTeamView(playerStats, defStats) {
     const tempRows = [];
@@ -66,9 +66,9 @@ export default function ProcessTeamView(playerStats, defStats) {
         //score tally for each week
         let weekTotal = 0;
         const superBowlFactor =  week === 4 ? 1.5 : 1;
-        offStatRecords.forEach( (stat, id) => {
+        Object.entries(offStatRecordPoints).forEach(([stat, points]) => {
           playerObject[stat+week] = ele[stat+week];
-          weekTotal += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor
+          weekTotal += ele[stat+week]*points*superBowlFactor
         })
 
         //write field for individual week total then add to overall total

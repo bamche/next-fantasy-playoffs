@@ -139,12 +139,11 @@ export default function OffenseStats({ session }){
         //score tally for each week
         let weekTotal = 0;
         const superBowlFactor =  week === 4 ? 1.5 : 1;
-
-        offStatRecords.forEach( (stat, id) => {
+        Object.entries(offStatRecordPoints).forEach(([stat, points]) => {
           //add up each stat week by week to condense to a total
           if(playerObject[stat] !== undefined) playerObject[stat] += ele[stat+week];
           else playerObject[stat] = ele[stat+week];
-          weekTotal += ele[stat+week]*(offStatRecordPoints[id])*superBowlFactor
+          weekTotal += ele[stat+week]*(points)*superBowlFactor
         })
 
         //add to overall total

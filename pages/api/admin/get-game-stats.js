@@ -1,6 +1,7 @@
 const axios = require('axios');
 const format = require('pg-format');
 import db from '../../../lib/playerDataModels';
+import {updateUserListPointsQuery, updateUserDefPointsQuery, offStatRecordPoints} from '../../../utils/constants'
 
 export default async function getGameStats(req, res) {
     const week = req.query.week;
@@ -23,6 +24,7 @@ export default async function getGameStats(req, res) {
             throw new Error("Incorrect week format");
         } 
         const gameStatsData = await axios(parameters);
+
         await determineLoser(
             gameStatsData.data.game.homeTeam, 
             gameStatsData.data.game.awayTeam, 
@@ -33,7 +35,7 @@ export default async function getGameStats(req, res) {
 
         const playerStatsLog = updateDBPlayerStats(week, playerStats);
         const defenseStatsLog = updatDBDefenseStats(week, defenseStats);
-
+        await updateUserListPoints();
         res.status(200).send({ playerStatsLog, defenseStatsLog });
     } catch(e){
         console.log(`get-game-stats api error:  ${e}`);
@@ -83,8 +85,17 @@ function processPlayerStats(data, week) {
             const fg50 = (position === "K" ? current.fieldGoals.fgMade50Plus : 0);
             const xtpm = (position === "K" ? current.extraPointAttempts.xpMade : 0);
             const points = ( 
-                pass_yd * 0.025 + pass_td * 4 + interception * -2 + rush_yd * 0.1 + rush_td * 6 + rec_yd * 0.1 + 
-                rec_td * 6 + rec * 1 + te_rec * 1.5 + two_pt * 2 + fg30 * 3 + fg40 * 4 + fg50 * 5 + xtpm * 1
+                pass_yd * offStatRecordPoints['pass_yd'] + 
+                pass_td * offStatRecordPoints['pass_td'] + 
+                interception * offStatRecordPoints['interception'] + 
+                rush_yd * offStatRecordPoints['rush_yd'] + 
+                rush_td * offStatRecordPoints['rush_td'] + 
+                rec_yd * offStatRecordPoints['rec_yd'] + 
+                rec_td * offStatRecordPoints['rec_td'] + 
+                rec * offStatRecordPoints['rec'] + 
+                te_rec * offStatRecordPoints['te_rec'] + 
+                two_pt * offStatRecordPoints['two_pt'] + 
+                fg30 * 3 + fg40 * 4 + fg50 * 5 + xtpm * 1
                 ) * superBowlFactor;
 
             sortedPlayerStats.push(
@@ -123,7 +134,6 @@ async function updateDBPlayerStats(week, playerStats) {
 
         const formatString = format(SQLQueryString, playerStats);
 
-        console.log(formatString)
         await db.query(formatString);
         return "SQL operation complete: " + formatString;
     } catch(e) {
@@ -172,7 +182,7 @@ function calculatePointsAllowedScore (pointsAllowed) {
 
 function sortDefense(team, superBowlFactor) {
     const sacks = team.tackles.sacks;
-    const turnovers = team.interceptions.interceptions + team.fumbles.fumForced;
+    const turnovers = team.interceptions.interceptions + team.fumbles.fumOppRec;
     const blocks = team.interceptions.kB;
     const safeties = team.interceptions.safeties;
     const touchdowns = team.interceptions.intTD + team.fumbles.fumTD + team.kickoffReturns.krTD + 
@@ -191,4 +201,15 @@ async function determineLoser(homeTeam, awayTeam, homeScore, awayScore) {
                         SET eliminated = true
                         WHERE team_id = ${loser.id};`
     await db.query(queryString);
+}
+
+async function updateUserListPoints() {
+    const emailQueryString = `SELECT email FROM public.user_list;`
+    const emailList = (await db.query(emailQueryString)).rows;
+          
+    for(const email of emailList) {
+        console.log(email)
+        await db.query(updateUserListPointsQuery(email.email));
+        await db.query(updateUserDefPointsQuery(email.email));
+    }
 }

@@ -1,4 +1,4 @@
-import { positionList, defStatRecords, defStatRecordPoints, offStatRecords, offStatRecordPoints} from "./constants";
+import { positionList, defStatRecords, defStatRecordPoints} from "./constants";
 
 export default function ProcessLeagueView(leagueStats) {
 
@@ -29,7 +29,7 @@ export default function ProcessLeagueView(leagueStats) {
 
     weeks.forEach( week => {
         const superBowlFactor =  week === 4 ? 1.5 : 1
-        defStatRecords.forEach( (stat, id) => {
+        defStatRecords.forEach((stat, id) => {
         
 
         //allow for points allowed scoring logic
