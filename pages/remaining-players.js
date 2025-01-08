@@ -3,13 +3,11 @@ import axios from "axios";
 import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import GetRemainingPlayersView from '../utils/GetRemainingPlayersView'
+import { TIME_CUT_OFF, isLeagueStart } from "../utils/constants";
 
 
 
-export default function RemainingPlayersView({ session, timeCutoff, leagueStats, columns }){
-    const startTimeDate = new Date(timeCutoff);
-    const startTime = Date.parse(timeCutoff); 
-    const now = Date.now();
+export default function RemainingPlayersView({ session, leagueStats, columns }){
     const email = session.user.email;
 
     
@@ -21,9 +19,9 @@ export default function RemainingPlayersView({ session, timeCutoff, leagueStats,
   return(
     <div > 
       <h1> Remaining Player Leader Board </h1>
-      {now < startTime && (
-        <h2> *** Leader Board available after {startTimeDate.toLocaleString()} ***</h2>
-      )}
+      {!isLeagueStart() && (
+            <h2> *** Available after {new Date(TIME_CUT_OFF).toLocaleString()} ***</h2>
+          )}
       <div style={{ height: 700, width: '100%' }}>
       <DataGrid
         rows={leagueStats}
@@ -42,12 +40,20 @@ export default function RemainingPlayersView({ session, timeCutoff, leagueStats,
 
 export async function getServerSideProps(context) {
   const sessionUser = await getSession(context);
-  const {remaingPlayerList, columns} = await GetRemainingPlayersView();
+  let remaingPlayerListData, columnsData
+  if (!isLeagueStart()) {
+    remaingPlayerListData = [];
+    columnsData = []
+  } else {
+    const {remaingPlayerList, columns} = await GetRemainingPlayersView();
+    remaingPlayerListData = remaingPlayerList
+    columnsData = columns
+  }
   return {
     props: {
       session: sessionUser,
-      leagueStats: remaingPlayerList,
-      columns
+      leagueStats: remaingPlayerListData,
+      columns: columnsData
     },
   };
 }

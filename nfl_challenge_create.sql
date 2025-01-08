@@ -12,6 +12,11 @@ CREATE TABLE "user_list" (
 	"flex4" integer,
 	"k" integer,
 	"dst" integer,
+	"total1"  DECIMAL(10, 2) DEFAULT 0,
+	"total2"  DECIMAL(10, 2) DEFAULT 0,
+	"total3"  DECIMAL(10, 2) DEFAULT 0,
+	"total4"  DECIMAL(10, 2) DEFAULT 0,
+	"grand_total"  DECIMAL(10, 2) DEFAULT 0;
 	CONSTRAINT "user_list_pk" PRIMARY KEY ("email")
 ) WITH (
   OIDS=FALSE
@@ -148,6 +153,7 @@ ALTER TABLE "player_list" ADD CONSTRAINT "player_list_fk0" FOREIGN KEY ("player_
 
 ALTER TABLE "def_list" ADD CONSTRAINT "def_list_fk0" FOREIGN KEY ("def_id") REFERENCES "def_list"("_id");
 
-
-
-
+ALTER TABLE user_list
+ADD COLUMN grand_total DECIMAL GENERATED ALWAYS AS (
+  COALESCE(total1, 0) + COALESCE(total2, 0) + COALESCE(total3, 0) + COALESCE(total4, 0)
+) STORED;

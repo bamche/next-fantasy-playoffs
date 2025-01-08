@@ -3,6 +3,7 @@ import axios from "axios";
 import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import GetLeagueView from '../utils/GetLeagueView'
+import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
 
 const columns = [
   {
@@ -100,16 +101,14 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-export default function LeagueView({ session, timeCutoff, leagueStats }){
-    const startTimeDate = new Date(timeCutoff);
-    const startTime = Date.parse(timeCutoff); 
-    const now = Date.now();
+export default function LeagueView({ session, leagueStats }){
+    const startTimeDate = new Date(TIME_CUT_OFF);
     const email = session.user.email;
 
   return(
     <div > 
       <h1> Leader Board </h1>
-      {now < startTime && (
+      {!isLeagueStart() && (
         <h2> *** Leader Board available after {startTimeDate.toLocaleString()} ***</h2>
       )}
       <div style={{ height: 700, width: '100%' }}>
@@ -130,7 +129,8 @@ export default function LeagueView({ session, timeCutoff, leagueStats }){
 
 export async function getServerSideProps(context) {
   const sessionUser = await getSession(context);
-  const leagueStats = await GetLeagueView();
+  const leagueStats = isLeagueStart() ? await GetLeagueView() : [];
+
   return {
     props: {
       session: sessionUser,

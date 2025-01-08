@@ -2,7 +2,7 @@ import db from '../lib/playerDataModels'
 import ProcessLeagueView from './ProcessLeagueView';
 
 export default async function GetLeagueView() {
-
+  
   try{
     //retrieve emails of all players in league
     const emailQueryString = `SELECT email FROM public.user_list;`

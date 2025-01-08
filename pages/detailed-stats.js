@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { getSession } from 'next-auth/react';
-import { positionList, defStatRecords, defStatRecordPoints, offStatRecords, offStatRecordPoints} from "../utils/constants";
+import { positionList, defStatRecords, defStatRecordPoints, offStatRecords, offStatRecordPoints, TIME_CUT_OFF, isLeagueStart} from "../utils/constants";
 
 const columns = [
 
@@ -116,6 +116,7 @@ export default function OffenseStats({ session }){
  
   useEffect(() =>{
   const fetchPlayer = async () => {
+    if(!isLeagueStart()) return;
     const tempRows = []
     const stats = await axios.get('/api/detailed-stats');
     const playerStats = stats.data.offensePlayerStats;
@@ -164,6 +165,9 @@ export default function OffenseStats({ session }){
   return(
     <div> 
       <h1>Detailed Player Stats </h1>
+      {!isLeagueStart() && (
+            <h2> *** Available after {new Date(TIME_CUT_OFF).toLocaleString()} ***</h2>
+          )}
       <div style={{ height: 700, width: '100%' }}>
       <DataGrid
         rows={rows}

@@ -175,3 +175,11 @@ export const updateUserDefPointsQuery = (email) => {
     ) AS subquery
     WHERE u.email = subquery.email;`
 }
+
+export const TIME_CUT_OFF = '11 Jan 2025 21:31:00 GMT';
+
+export const isLeagueStart = () => {
+  const startTime = Date.parse(TIME_CUT_OFF); 
+  const now = Date.now();
+  return now > startTime
+}

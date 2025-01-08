@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 // import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Drawer from '../components/Drawer'
+import { TIME_CUT_OFF } from '../utils/constants'
 
 // Stying imports
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,7 +15,7 @@ import Typography from '@mui/material/Typography';
 function MyApp(props) {
   const router = useRouter();
   const { Component, pageProps } = props;
-  pageProps.timeCutoff = '13 Jan 2024 21:31:00 GMT';
+  pageProps.timeCutoff = TIME_CUT_OFF;
   
   return (
     <Fragment>
