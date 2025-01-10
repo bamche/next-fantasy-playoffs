@@ -16,7 +16,9 @@ CREATE TABLE "user_list" (
 	"total2"  DECIMAL(10, 2) DEFAULT 0,
 	"total3"  DECIMAL(10, 2) DEFAULT 0,
 	"total4"  DECIMAL(10, 2) DEFAULT 0,
-	"grand_total"  DECIMAL(10, 2) DEFAULT 0;
+	"grand_total" DECIMAL GENERATED ALWAYS AS (
+        COALESCE(total1, 0) + COALESCE(total2, 0) + COALESCE(total3, 0) + COALESCE(total4, 0)
+    ) STORED,
 	CONSTRAINT "user_list_pk" PRIMARY KEY ("email")
 ) WITH (
   OIDS=FALSE
@@ -149,11 +151,15 @@ ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk9" FOREIGN KEY ("flex4") REF
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk10" FOREIGN KEY ("k") REFERENCES "player_list"("player_id");
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk11" FOREIGN KEY ("dst") REFERENCES "def_list"("def_id");
 
-ALTER TABLE "player_list" ADD CONSTRAINT "player_list_fk0" FOREIGN KEY ("player_id") REFERENCES "player_list"("_id");
 
-ALTER TABLE "def_list" ADD CONSTRAINT "def_list_fk0" FOREIGN KEY ("def_id") REFERENCES "def_list"("_id");
+------------------------------------------------------------------------------------------------------------------
+-- Theres are causing issues, may not be needed
+-- ALTER TABLE "player_list" ADD CONSTRAINT "player_list_fk0" FOREIGN KEY ("player_id") REFERENCES "player_list"("_id");
 
-ALTER TABLE user_list
-ADD COLUMN grand_total DECIMAL GENERATED ALWAYS AS (
-  COALESCE(total1, 0) + COALESCE(total2, 0) + COALESCE(total3, 0) + COALESCE(total4, 0)
-) STORED;
+-- ALTER TABLE "def_list" ADD CONSTRAINT "def_list_fk0" FOREIGN KEY ("def_id") REFERENCES "def_list"("_id");
+
+------This was used to change the table after the fact and should not be needed anymore ------
+-- ALTER TABLE user_list
+-- ADD COLUMN grand_total DECIMAL GENERATED ALWAYS AS (
+--   COALESCE(total1, 0) + COALESCE(total2, 0) + COALESCE(total3, 0) + COALESCE(total4, 0)
+-- ) STORED;
