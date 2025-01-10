@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import Link from "next/link";
 
 const columns = [
   {
@@ -66,34 +67,47 @@ columns.forEach(ele => {
 function TeamView({ session }){
   const [rows, setRows] = useState([])
   const email = session.user.email;
-   
+  let isTeamSet = false;
   
   useEffect(() =>{
   const fetchPlayer = async () => {
+   
     const statsRespose = await axios.get('/api/player-stats', { params:{email} } );
-    const teamViewStats = statsRespose.data.teamViewStats;
-    setRows(teamViewStats);
+    console.log(statsRespose)
+    if (statsRespose.data.length != 0) {
+      isTeamSet = true;
+      const teamViewStats = statsRespose.data.teamViewStats;
+      setRows(teamViewStats);
+    }
+
   };
   fetchPlayer();
 }, []);
-  return(
-    <div > 
-      <h1>{email} - Team View </h1>
-      <div style={{ height: 600, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        density={'compact'}
-        pageSize={13}
-        disableSelectionOnClick
-        disableColumnMenu
-        components={{
-          Toolbar: GridToolbar,
-        }}
-      />
-      </div>
+return (
+  <div>
+    <h1>{email} - Team View</h1>
+    <div style={{ height: 600, width: '100%' }}>
+      {isTeamSet ? (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          density="compact"
+          pageSize={13}
+          disableSelectionOnClick
+          disableColumnMenu
+          components={{
+            Toolbar: GridToolbar,
+          }}
+        />
+      ) : (
+        <Link href="/team-builder">
+          Click here to set lineup
+        </Link>
+      )}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default TeamView;

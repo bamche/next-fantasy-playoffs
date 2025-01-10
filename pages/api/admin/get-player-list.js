@@ -1,19 +1,17 @@
 const axios = require('axios');
 const format = require('pg-format');
 import db from '../../../lib/playerDataModels'
+import { SEASON_ID, TEAM_LIST, PLAYERS_URL } from '../../../utils/constants';
 
 export default async function getPlayerList(req, res) {
     const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64');
 
     const headers = {
         'Authorization': `Basic ${token}`
-    }
-    const baseURL = process.env.PLAYERS_URL;
-    const season = '2023-2024-regular';
-    const team = 'buf,tb,kc,pit,sf,phi,dal,lar,hou,cle,gb,mia,det,bal';
+    };
     const position = 'qb,rb,wr,te,k';
 
-    const url = baseURL + `?season=${season}&team=${team}&position=${position}`;
+    const url = PLAYERS_URL + `?season=${SEASON_ID}&team=${TEAM_LIST}&position=${position}`;
 
     const parameters = {
         url,
@@ -22,6 +20,7 @@ export default async function getPlayerList(req, res) {
     };
 
     try{
+        console.log(parameters)
         const playerList = await axios(parameters);
         const [playerData, teamData] = addPlayers(playerList.data.players);
 

@@ -7,7 +7,10 @@ export default async function playerStats(req, res) {
     //intial call to retieve player ID, then put into array for ordering since results return unordered
     const playerListQueryString = `SELECT (qb, rb1, rb2, wr1, wr2, te, flex1, flex2, flex3, flex4, k, dst) FROM public.user_list WHERE email= '${email}';`;
     const SQLplayerIDList = await db.query(playerListQueryString);
-    console.log(SQLplayerIDList)
+    if (!SQLplayerIDList.rows[0]) {
+      console.log('No players returned')
+      return res.status(200).send([])
+    }
     const rawPlayerIDList = SQLplayerIDList.rows[0].row;
     const playerIDList = rawPlayerIDList.replace('(' , '').replace(')', '').split(',');
 

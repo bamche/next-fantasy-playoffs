@@ -1,7 +1,7 @@
 const axios = require('axios');
 const format = require('pg-format');
 import db from '../../../lib/playerDataModels';
-import {updateUserListPointsQuery, updateUserDefPointsQuery, offStatRecordPoints} from '../../../utils/constants'
+import { updateUserListPointsQuery, updateUserDefPointsQuery, offStatRecordPoints, GAME_URL} from '../../../utils/constants'
 
 export default async function getGameStats(req, res) {
     const week = req.query.week;
@@ -12,7 +12,7 @@ export default async function getGameStats(req, res) {
     const headers = {
         'Authorization': `Basic ${token}`
     }
-    const url = process.env.GAME_URL + `${req.query.gameID}/boxscore.json`;
+    const url = GAME_URL + `${req.query.gameID}/boxscore.json`;
     const parameters ={
         url,
         method: 'get',
