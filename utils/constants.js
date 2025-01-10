@@ -1,5 +1,5 @@
 export const SEASON_ID = '2024-2025-regular';
-export const TEAM_LIST = 'buf,tb,kc,pit,phi,lar,hou,gb,det,bal,lac,min,den,was';
+export const TEAM_LIST = 'buf,tb,kc,pit,phi,la,hou,gb,det,bal,lac,min,den,was';
 export const GAME_URL = 'https://api.mysportsfeeds.com/v2.1/pull/nfl/2025-playoff/games/';
 export const PLAYERS_URL = 'https://api.mysportsfeeds.com/v2.1/pull/nfl/players.json';
 
