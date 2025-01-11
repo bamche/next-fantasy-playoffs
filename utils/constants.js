@@ -3,6 +3,15 @@ export const TEAM_LIST = 'buf,tb,kc,pit,phi,la,hou,gb,det,bal,lac,min,den,was';
 export const GAME_URL = 'https://api.mysportsfeeds.com/v2.1/pull/nfl/2025-playoff/games/';
 export const PLAYERS_URL = 'https://api.mysportsfeeds.com/v2.1/pull/nfl/players.json';
 
+
+export const TIME_CUT_OFF = '11 Jan 2024 21:31:00 GMT';
+
+export const isLeagueStart = () => {
+  const startTime = Date.parse(TIME_CUT_OFF); 
+  const now = Date.now();
+  return now > startTime
+}
+
 export const positionList = 
 ['qb', 'rb1', 'rb2', 'wr1', 'wr2', 'te', 'flex1', 'flex2', 'flex3', 'flex4', 'k', 'dst'];
 
@@ -179,12 +188,4 @@ export const updateUserDefPointsQuery = (email) => {
         u.email
     ) AS subquery
     WHERE u.email = subquery.email;`
-}
-
-export const TIME_CUT_OFF = '11 Jan 2025 21:31:00 GMT';
-
-export const isLeagueStart = () => {
-  const startTime = Date.parse(TIME_CUT_OFF); 
-  const now = Date.now();
-  return now > startTime
 }
