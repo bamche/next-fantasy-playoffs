@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from "axios";
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
-
+import GetleagueView from "../utils/GetLeagueView"
 const columns = [
   {
     field: 'total',
@@ -143,7 +143,7 @@ export async function getServerSideProps(context) {
     const { default: redisClient } = await import('../lib/redisClient');
     const cache = await redisClient.get('league-view')
     if (!cache) {
-      leagueStats = await axios.get('/api/league-view'); 
+      leagueStats = await GetleagueView()// await axios.get('/api/league-view'); 
       console.log('cache miss')
       redisClient.set('league-view', JSON.stringify(leagueStats));
     } else {
