@@ -1,6 +1,7 @@
 const axios = require('axios');
 const format = require('pg-format');
 import db from '../../../lib/playerDataModels';
+import redisClient from '../../../lib/redisClient';
 import { updateUserListPointsQuery, updateUserDefPointsQuery, offStatRecordPoints, GAME_URL} from '../../../utils/constants'
 
 export default async function getGameStats(req, res) {
@@ -15,8 +16,15 @@ export default async function getGameStats(req, res) {
         method: 'get',
         headers
     };
+    try {
+        await redisClient.flushDb();
+        console.log('All caches invalidated (current database).');
+    } catch(e){
+        console.log(`get-game-stats cache error:  ${e}`);
+        res.status(500).send(e);
+    };
 
-    try{
+    try {
         if (week != '1' && week != '2' && week != '3' && week != '4') {
             throw new Error("Incorrect week format");
         } 
