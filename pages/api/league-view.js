@@ -5,7 +5,7 @@ export default async function leagueView (req, res) {
 
   try{
     //retrieve emails of all players in league
-const emailQueryString = `SELECT email FROM public.user_list;`
+    const emailQueryString = `SELECT email FROM public.user_list;`
     const emailList = (await db.query(emailQueryString)).rows;
     
     const leagueStats = {};
