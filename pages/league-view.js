@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import React from "react";
 import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import GetLeagueView from '../utils/GetLeagueView'
+import axios from "axios";
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
 
 const columns = [
@@ -129,7 +128,30 @@ export default function LeagueView({ session, leagueStats }){
 
 export async function getServerSideProps(context) {
   const sessionUser = await getSession(context);
-  const leagueStats = isLeagueStart() ? await GetLeagueView() : [];
+
+  if (!isLeagueStart()) {
+    return {
+      props: {
+        session: sessionUser,
+        leagueStats: [],
+      },
+    };
+  }
+
+  let leagueStats = [];
+  try {
+    const { default: redisClient } = await import('../lib/redisClient');
+    const cache = await redisClient.get('league-view')
+    if (!cache) {
+      leagueStats = await axios.get('/api/league-view'); 
+      console.log('cache miss')
+      redisClient.set('league-view', JSON.stringify(leagueStats));
+    } else {
+      leagueStats = JSON.parse(cache);
+    }
+  } catch (err) {
+    console.log(`server side error in league-view: ${err}`);
+  }
 
   return {
     props: {
