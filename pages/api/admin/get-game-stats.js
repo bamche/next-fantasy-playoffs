@@ -5,9 +5,6 @@ import { updateUserListPointsQuery, updateUserDefPointsQuery, offStatRecordPoint
 
 export default async function getGameStats(req, res) {
     const week = req.query.week;
-    if (req.query.key !== process.env.API_KEY) {
-        throw new Error("Unauthorized");
-    }
     const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64');
     const headers = {
         'Authorization': `Basic ${token}`
@@ -143,7 +140,7 @@ async function updateDBPlayerStats(week, playerStats) {
 
 async function updatDBDefenseStats(week, defenseStats) {
     try{
-        const SQLQueryString = `INSERT INTO public.def_list 
+        const SQLQueryString = `INSERT INTO def_list 
           (def_id, sack${week},	turnover${week}, block_ret${week}, sfty${week},	td${week}, pts_allowed${week}, points${week}) 
           VALUES %L 
           ON CONFLICT (def_id) 

@@ -34,7 +34,6 @@ export default function Admin({ session }) {
               <form method={'POST'} onSubmit={onSubmit} >
                   <input name="gameID" type="text" placeholder="YYYYMMDD-{away team}-{home team}" className="form-control"></input>
                   <input name="week" type="text" placeholder="week 1/2/3/4" className="form-control"></input>
-                  <input name="key" type="text" placeholder="key" className="form-control"></input>
                   <div className="d-grid gap-2 ">
                       <input type='submit' value="submit" id="submit-query-button" className="btn btn-primary"></input>
 

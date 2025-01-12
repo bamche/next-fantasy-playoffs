@@ -66,8 +66,8 @@ columns.forEach(ele => {
 
 function TeamView({ session }){
   const [rows, setRows] = useState([])
+  const [isTeamSet, setIsTeamSet] = useState(false);
   const email = session.user.email;
-  let isTeamSet = false;
   
   useEffect(() =>{
   const fetchPlayer = async () => {
@@ -75,11 +75,11 @@ function TeamView({ session }){
     const statsRespose = await axios.get('/api/player-stats', { params:{email} } );
     console.log(statsRespose)
     if (statsRespose.data.length != 0) {
-      isTeamSet = true;
+      setIsTeamSet(true);
       const teamViewStats = statsRespose.data.teamViewStats;
       setRows(teamViewStats);
     }
-
+  
   };
   fetchPlayer();
 }, []);

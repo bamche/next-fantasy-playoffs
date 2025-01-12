@@ -125,6 +125,10 @@ CREATE TABLE "def_list" (
 	"sfty4" integer,
 	"td4" integer,
 	"pts_allowed4" integer,
+	"points1" decimal,
+	"points2" decimal,
+	"points3" decimal,
+	"points4" decimal,
 	CONSTRAINT "def_list_pk" PRIMARY KEY ("def_id")
 ) WITH (
   OIDS=FALSE
