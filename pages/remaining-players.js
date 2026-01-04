@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import GetRemainingPlayersView from '../utils/GetRemainingPlayersView'
+import GetRemainingView from '../utils/GetRemainingView'
 import { TIME_CUT_OFF, isLeagueStart } from "../utils/constants";
 
 
@@ -45,9 +45,13 @@ export async function getServerSideProps(context) {
     remaingPlayerListData = [];
     columnsData = []
   } else {
-    const {remaingPlayerList, columns} = await GetRemainingPlayersView();
-    remaingPlayerListData = remaingPlayerList
-    columnsData = columns
+    const {remainingPlayers, columns} = await GetRemainingView();
+    console.log(remainingPlayers)
+    remaingPlayerListData = remainingPlayers;
+    columnsData = columns;
+    // console.log(await GetRemainingView())
+    // remaingPlayerListData = [];
+    // columnsData = []
   }
   return {
     props: {
