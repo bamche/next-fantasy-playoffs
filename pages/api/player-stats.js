@@ -1,10 +1,13 @@
 import db from '../../lib/pgClient';
 import ProcessTeamView from '../../utils/ProcessTeamView';
 import redisClient from '../../lib/redisClient';
+import processGamesAutomatically from '../../utils/processGamesAutomatically';
 
 export default async function playerStats(req, res) {
   const { email } = req.query;
-  
+  // redisClient.flushDb();
+  await processGamesAutomatically();
+
   const cache = await redisClient.get(`team-view-${email}`);
   if (cache) {
     const teamViewStats = JSON.parse(cache);

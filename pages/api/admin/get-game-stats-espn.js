@@ -12,10 +12,14 @@ import {
 } from '../../../utils/constants';
 import ESPNClient from '../../../lib/apiClients/ESPNClient';
 
-export default async function getGameStatsESPN(req, res) {
+/**
+ * Core function to process game stats for a given gameId
+ * @param {string} gameId - The ESPN game ID
+ * @returns {Promise<Object>} Object containing playerStatsLog, defenseStatsLog, and kickerStatsLog
+ */
+export async function processGameStats(gameId) {
     const espnClient = new ESPNClient();
 
-    const gameId = req.query.gameId;
     const gameEvent = await espnClient.getGameEvent(gameId);
     const week = determineGameWeek(gameEvent);
     const {teamIds, loserId} = extractTeamInfo(gameEvent);
@@ -29,32 +33,49 @@ export default async function getGameStatsESPN(req, res) {
 
     const parsedTeamStats = parseTeamStatistics(teamStatsResponses, teamIds);
     const playerStats = await espnClient.getPlayerStatistics(gameId, teamPlayerIds);
+    
     try {
-        await redisClient.flushDb();
+        await redisClient.deleteTeamViewKeys();
+        await redisClient.deleteLeagueViewKey();
         console.log('All caches invalidated (current database).');
     } catch(e){
         console.log(`get-game-stats cache error:  ${e}`);
-        res.status(500).send(e);
-    };
+        throw e;
+    }
 
+    if (week != '1' && week != '2' && week != '3' && week != '4') {
+        throw new Error("Incorrect week format");
+    } 
+
+    const playerStatsLog =  updatePlayerStats(playerStats, playerIdToPositionMap, playerIdToNflTeamMap, week);
+    const defenseStatsLog = updatDefenseStats(week, parsedTeamStats, teamIds);
+    const kickerStatsLog = updateKickerStats(week, parsedTeamStats);
+    const eliminatedLog =  updateEliminated(loserId);
+
+    await Promise.all([playerStatsLog, defenseStatsLog, kickerStatsLog, eliminatedLog]);
+    await updateUserListPoints();
+    
+    return { playerStatsLog, defenseStatsLog, kickerStatsLog };
+}
+
+/**
+ * API endpoint handler for processing game stats
+ * GET /api/admin/get-game-stats-espn?gameId=<gameId>
+ */
+export default async function getGameStatsESPN(req, res) {
     try {
-        if (week != '1' && week != '2' && week != '3' && week != '4') {
-            throw new Error("Incorrect week format");
-        } 
-
-        const playerStatsLog =  updatePlayerStats(playerStats, playerIdToPositionMap, playerIdToNflTeamMap, week);
-        const defenseStatsLog = updatDefenseStats(week, parsedTeamStats, teamIds);
-        const kickerStatsLog = updateKickerStats(week, parsedTeamStats);
-        const eliminatedLog =  updateEliminated(loserId);
-
-        Promise.all([playerStatsLog, defenseStatsLog, kickerStatsLog, eliminatedLog]);
-        await updateUserListPoints();
-        res.status(200).send({ playerStatsLog, defenseStatsLog, kickerStatsLog });
+        const gameId = req.query.gameId;
+        
+        if (!gameId) {
+            return res.status(400).send({ error: 'gameId query parameter is required' });
+        }
+        
+        const result = await processGameStats(gameId);
+        res.status(200).send(result);
     } catch(e){
         console.log(`get-game-stats api error:  ${e}`);
-        res.status(500).send(e);
-    };
-
+        res.status(500).send({ error: e.message || 'Internal server error' });
+    }
 };
 
 async function updatePlayerStats(playerStats, playerIdToPositionMap, playerIdToNflTeamMap, week) {
