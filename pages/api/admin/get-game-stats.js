@@ -17,7 +17,8 @@ export default async function getGameStats(req, res) {
         headers
     };
     try {
-        await redisClient.flushDb();
+        await redisClient.deleteTeamViewKeys();
+        await redisClient.deleteLeagueViewKey();
         console.log('All caches invalidated (current database).');
     } catch(e){
         console.log(`get-game-stats cache error:  ${e}`);
