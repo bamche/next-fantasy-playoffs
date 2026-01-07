@@ -43,7 +43,7 @@ function Login(){
                     <CssBaseline />
                     <div className={classes.paper}>
                     <Typography component="h1" variant="h5">
-                        NFL Playoff Challenge 2022
+                        NFL Playoff Challenge
                     </Typography>
                     <form className={classes.form} noValidate >
                       <Link href="/api/auth/signin">
