@@ -86,16 +86,38 @@ export default function TeamBuilder({ session, timeCutoff }) {
 
   useEffect(() =>{
     const fetchPlayers = async () => {
-      const players = await axios.get('/api/team-builder/')
+      const players = await axios.get(`/api/team-builder/?email=${encodeURIComponent(email)}`)
       const fetchedPlayerList = players.data.playerList;
       const fetchedDefList = players.data.defList;
+      const userTeam = players.data.userTeam;
       
       let formattdPlayerList = fetchedPlayerList.map(el =>[el.player_id, `${el.nfl_team}, ${el.player_name}, ${el.position}`, el.color, el.alternate_color])
       const totalList = formattdPlayerList.concat(fetchedDefList.map(el => [el.def_id,`${el.nfl_team} -- DST`, el.color, el.alternate_color]))
       setPlayerList(totalList);
+      console.log(userTeam);
+      console.log(fetchedPlayerList);
+      // If user has an existing team, populate teamSelection
+      if (userTeam) {
+        setTeamSelection(userTeam);
+
+        // Update addedTags based on populated team
+        const tags = [];
+        Object.values(userTeam).forEach(entry => {
+          if (entry[0] !== null) {
+            const playerText = entry[1];
+            const playerTags = (playerText.includes('--') ? playerText.split(' ') : playerText.split(", "));
+            if (['QB','K', 'DST'].includes(playerTags[2])) {
+              tags.push(playerTags[0], playerTags[2]);
+            } else {
+              tags.push(playerTags[0]);
+            }
+          }
+        });
+        setAddedTags(tags);
+      }
     };
     fetchPlayers()
-  }, []);
+  }, [email]);
   
   //logic to search for players in drop down list
   const filter = e => {

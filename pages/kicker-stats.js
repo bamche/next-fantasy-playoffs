@@ -81,7 +81,7 @@ export default function KickerStats({ session }){
       playerObject.playerid = ele.player_id; 
       playerObject.name = ele.player_name;
       playerObject.position = ele.position;
-      playerObject.team = ele.nfl_team;
+      playerObject.team = ele.abbreviation;
 
       //temporary value to hold scores through iteration
       let total = 0;
