@@ -25,18 +25,18 @@ export default function TeamBuilder({ session, timeCutoff }) {
   const [submissionError, setSubmissionError] = useState(false);
   const [teamSelection, setTeamSelection] = 
   useState({
-    qb:[null,'QB'],
-    rb1:[null,'RB'],
-    rb2:[null,'RB'],
-    wr1:[null,'WR'],
-    wr2:[null,'WR'],
-    te:[null,'TE'],
-    flex1:[null,'FLEX'],
-    flex2:[null,'FLEX'],
-    flex3:[null,'FLEX'],
-    flex4:[null,'FLEX'],
-    k:[null,'K'],
-    dst:[null,'DST']
+    qb:[null,'QB', null, null],
+    rb1:[null,'RB', null, null],
+    rb2:[null,'RB', null, null],
+    wr1:[null,'WR', null, null],
+    wr2:[null,'WR', null, null],
+    te:[null,'TE', null, null],
+    flex1:[null,'FLEX', null, null],
+    flex2:[null,'FLEX', null, null],
+    flex3:[null,'FLEX', null, null],
+    flex4:[null,'FLEX', null, null],
+    k:[null,'K', null, null],
+    dst:[null,'DST', null, null]
 
   });
  
@@ -90,10 +90,9 @@ export default function TeamBuilder({ session, timeCutoff }) {
       const fetchedPlayerList = players.data.playerList;
       const fetchedDefList = players.data.defList;
       
-      let formattdPlayerList = fetchedPlayerList.map(el =>[el.player_id, `${el.nfl_team}, ${el.player_name}, ${el.position}`])
-      const totalList = formattdPlayerList.concat(fetchedDefList.map(el => [el.def_id,`${el.nfl_team} -- DST`]))
+      let formattdPlayerList = fetchedPlayerList.map(el =>[el.player_id, `${el.nfl_team}, ${el.player_name}, ${el.position}`, el.color, el.alternate_color])
+      const totalList = formattdPlayerList.concat(fetchedDefList.map(el => [el.def_id,`${el.nfl_team} -- DST`, el.color, el.alternate_color]))
       setPlayerList(totalList);
-      
     };
     fetchPlayers()
   }, []);
@@ -117,9 +116,11 @@ export default function TeamBuilder({ session, timeCutoff }) {
 
   const addPlayer = e => {
     const playerText = e.target.outerText;
-    const listEntry = [e.target.attributes.playerid.value, playerText];
+    const playerId = e.target.attributes.playerid.value;
+    const color = e.target.attributes.color.value;
+    const alternateColor = e.target.attributes.alternateColor.value;
+    const listEntry = [playerId, playerText, color, alternateColor];
     const playerTags = (playerText.includes('--') ? playerText.split(' ') : playerText.split(", "));
-
     const checkPosition = (position) => {
       if(['QB','K', 'DST'].includes(position) && addedTags.includes(position)){
         e.target.style.color = "red";
@@ -195,7 +196,14 @@ export default function TeamBuilder({ session, timeCutoff }) {
     
     const stateID = e.target.id
     const updated = {...teamSelection};
-    updated[stateID] = [null,'empty'];
+    // Map slot names to position names
+    const positionMap = {
+      qb: 'QB', rb1: 'RB', rb2: 'RB', wr1: 'WR', wr2: 'WR', 
+      te: 'TE', flex1: 'FLEX', flex2: 'FLEX', flex3: 'FLEX', 
+      flex4: 'FLEX', k: 'K', dst: 'DST'
+    };
+    const position = positionMap[stateID] || 'FLEX';
+    updated[stateID] = [null, position, null, null];
     setTeamSelection(updated);
 
     const playerText = e.target.outerText;
@@ -281,7 +289,7 @@ export default function TeamBuilder({ session, timeCutoff }) {
             }}
             subheader={<li />}
           >
-          {foundPlayers.map(el => (<li className="list-group-item" key={el[0]} playerid={el[0]} onClick={addPlayer}>{el[1]}</li>))} 
+          {foundPlayers.map(el => (<li className="list-group-item" key={el[0]} playerid={el[0]} color={el[2]} alternateColor={el[3]} onClick={addPlayer}>{el[1]}</li>))} 
           </List>
           </CardContent>
           </Card> 

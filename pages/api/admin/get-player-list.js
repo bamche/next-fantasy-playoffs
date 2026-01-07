@@ -1,28 +1,20 @@
-const axios = require('axios');
 const format = require('pg-format');
-import db from '../../../lib/playerDataModels'
-import { SEASON_ID, TEAM_LIST, PLAYERS_URL } from '../../../utils/constants';
+import db from '../../../lib/pgClient'
+import { SEASON_ID, TEAM_LIST } from '../../../utils/constants';
+import { createSportsApiClient } from '../../../lib/apiClients';
 
 export default async function getPlayerList(req, res) {
-    const token = Buffer.from(`${process.env.API_KEY}:${process.env.PASSWORD}`, 'utf8').toString('base64');
-
-    const headers = {
-        'Authorization': `Basic ${token}`
-    };
-    const position = 'qb,rb,wr,te,k';
-
-    const url = PLAYERS_URL + `?season=${SEASON_ID}&team=${TEAM_LIST}&position=${position}`;
-
-    const parameters = {
-        url,
-        method: 'get',
-        headers,
-    };
-
     try{
-        console.log(parameters)
-        const playerList = await axios(parameters);
-        const [playerData, teamData] = addPlayers(playerList.data.players);
+        const apiClient = createSportsApiClient();
+        const position = 'qb,rb,wr,te,k';
+        
+        const playerListData = await apiClient.getPlayerList({
+            season: SEASON_ID,
+            teams: TEAM_LIST,
+            positions: position
+        });
+        
+        const [playerData, teamData] = addPlayers(playerListData.players);
 
         const playerListString = await generatePlayerList(playerData);
         const defenseListString = await generateDefenseList(teamData);

@@ -1,4 +1,4 @@
-import db from '../lib/playerDataModels'
+import db from '../lib/pgClient'
 import GetRemainingColumns from './GetRemainingColumns';
 import { remainingDefQuery, remainingPlayerQuery } from './constants';
 

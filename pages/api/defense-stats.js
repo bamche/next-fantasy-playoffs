@@ -1,4 +1,4 @@
-import db from '../../lib/playerDataModels'
+import db from '../../lib/pgClient'
 import ProcessDefenseStats from '../../utils/ProcessDefenseStats';
 
 //to get the stats of all players that are on at least one team

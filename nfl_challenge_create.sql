@@ -30,7 +30,7 @@ CREATE TABLE "player_list" (
 	"player_id" integer NOT NULL,
 	"player_name" varchar,
 	"position" varchar,
-	"nfl_team" varchar,
+	"nfl_team" integer NOT NULL,
 	"pass_yd1" integer,
 	"pass_td1" integer,
 	"interception1" integer,
@@ -91,6 +91,7 @@ CREATE TABLE "player_list" (
 	"points2" decimal,
 	"points3" decimal,
 	"points4" decimal,
+	"eliminated" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "player_list_pk" PRIMARY KEY ("player_id")
 ) WITH (
   OIDS=FALSE
@@ -129,6 +130,7 @@ CREATE TABLE "def_list" (
 	"points2" decimal,
 	"points3" decimal,
 	"points4" decimal,
+	"eliminated" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "def_list_pk" PRIMARY KEY ("def_id")
 ) WITH (
   OIDS=FALSE
@@ -139,6 +141,19 @@ CREATE TABLE "eliminated_teams" (
     "nfl_team" VARCHAR NOT NULL,
     "eliminated" BOOLEAN DEFAULT false NOT NULL,
     CONSTRAINT "eliminated_teams_pk" PRIMARY KEY ("team_id")
+);
+
+CREATE TABLE "all_nfl_teams" (
+    "id" integer NOT NULL,
+    "abbreviation" varchar,
+    "name" varchar,
+    "is_active" boolean,
+    "slug" varchar,
+    "color" varchar,
+    "alternate_color" varchar,
+    CONSTRAINT "all_nfl_teams_pk" PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
 );
 
 
@@ -154,6 +169,7 @@ ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk8" FOREIGN KEY ("flex3") REF
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk9" FOREIGN KEY ("flex4") REFERENCES "player_list"("player_id");
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk10" FOREIGN KEY ("k") REFERENCES "player_list"("player_id");
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk11" FOREIGN KEY ("dst") REFERENCES "def_list"("def_id");
+ALTER TABLE "player_list" ADD CONSTRAINT "player_list_fk12" FOREIGN KEY ("nfl_team") REFERENCES "all_nfl_teams"("id");
 
 
 ------------------------------------------------------------------------------------------------------------------

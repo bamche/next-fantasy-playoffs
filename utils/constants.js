@@ -4,7 +4,10 @@ export const GAME_URL = 'https://api.mysportsfeeds.com/v2.1/pull/nfl/2025-playof
 export const PLAYERS_URL = 'https://api.mysportsfeeds.com/v2.1/pull/nfl/players.json';
 
 
-export const TIME_CUT_OFF = '11 Jan 2024 21:31:00 GMT';
+export const TIME_CUT_OFF = '10 Jan 2025 21:31:00 GMT';
+export const WEEK_1_END_DATE = '14 Jan 2026 07:00:00 GMT';
+export const WEEK_2_END_DATE = '21 Jan 2026 07:00:00 GMT';
+export const WEEK_3_END_DATE = '28 Jan 2026 07:00:00 GMT';
 
 export const isLeagueStart = () => {
   const startTime = Date.parse(TIME_CUT_OFF); 

@@ -1,0 +1,189 @@
+{
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401772961/competitions/401772961/competitors/26/statistics/0?lang=en&region=us",
+    "competition": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401772961/competitions/401772961?lang=en&region=us"
+    },
+    "team": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2025/teams/26?lang=en&region=us"
+    },
+    "splits": {
+        "id": "0",
+        "name": "All Splits",
+        "abbreviation": "Any",
+        "categories": [
+
+            {
+                "name": "defensive",
+                "displayName": "Defense",
+                "shortDisplayName": "Defensive",
+                "abbreviation": "def",
+                "summary": "",
+                "stats": [
+
+                    {
+                        "name": "defensiveTouchdowns",
+                        "displayName": "Defensive Touchdown",
+                        "shortDisplayName": "TD",
+                        "description": "The number of touchdowns recorded on defense.",
+                        "abbreviation": "TD",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "kicksBlocked",
+                        "displayName": "Kicks Blocked",
+                        "shortDisplayName": "KBLK",
+                        "description": "The number of times a kick was blocked.",
+                        "abbreviation": "KB",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "twoPtReturns",
+                        "displayName": "Two Point Returns",
+                        "shortDisplayName": "2PTR",
+                        "description": "The number of two point attempts that is returned by the defense.",
+                        "abbreviation": "2PTR",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "sacks",
+                        "displayName": "Sacks",
+                        "shortDisplayName": "Sacks",
+                        "description": "The total number of sacks.",
+                        "abbreviation": "SACK",
+                        "value": 3.0,
+                        "displayValue": "3"
+                    },
+                    {
+                        "name": "safeties",
+                        "displayName": "Safeties",
+                        "shortDisplayName": "SAFE",
+                        "description": "The number of times the offense is tackled in their own endzone.",
+                        "abbreviation": "SAFE",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "pointsAllowed",
+                        "displayName": "Points Allowed",
+                        "shortDisplayName": "PA",
+                        "description": "Points allowed",
+                        "abbreviation": "PA",
+                        "value": 3.0,
+                        "displayValue": "3"
+                    }
+                ]
+            },
+            {
+                "name": "defensiveInterceptions",
+                "displayName": "Defensive Interceptions",
+                "shortDisplayName": "Defensive Interceptions",
+                "abbreviation": "defint",
+                "summary": "",
+                "stats": [
+                    {
+                        "name": "interceptions",
+                        "displayName": "Interceptions",
+                        "shortDisplayName": "Interceptions",
+                        "description": "The total number of interceptions.",
+                        "abbreviation": "INT",
+                        "value": 1.0,
+                        "displayValue": "1"
+                    }
+                ]
+            },
+            {
+                "name": "kicking",
+                "displayName": "Kicking",
+                "shortDisplayName": "Kicking",
+                "abbreviation": "kick",
+                "summary": "",
+                "stats": [
+                    {
+                        "name": "extraPointsMade",
+                        "displayName": "Extra Points Made",
+                        "shortDisplayName": "XPM",
+                        "description": "The number of extra point attempts made.",
+                        "abbreviation": "XPM",
+                        "value": 1.0,
+                        "displayValue": "1"
+                    },
+                    {
+                        "name": "fieldGoalsMade",
+                        "displayName": "Field Goal Made",
+                        "shortDisplayName": "FGM",
+                        "description": "The number of times a field goal is made.",
+                        "abbreviation": "FGM",
+                        "value": 2.0,
+                        "displayValue": "2"
+                    },
+                    {
+                        "name": "fieldGoalsMade1_19",
+                        "displayName": "Field Goals Made 1-19",
+                        "shortDisplayName": "FGM 1-19",
+                        "description": "The number of field goals made from 1-19 yards.",
+                        "abbreviation": "FGM 1-19",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "fieldGoalsMade20_29",
+                        "displayName": "Field Goals Made 20-29",
+                        "shortDisplayName": "FGM 20-29",
+                        "description": "The number of field goals made from 20-29 yards.",
+                        "abbreviation": "FGM 20-29",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "fieldGoalsMade30_39",
+                        "displayName": "Field Goals Made 30-39",
+                        "shortDisplayName": "FGM 30-39",
+                        "description": "The number of field goals made from 30-39 yards.",
+                        "abbreviation": "FGM 30-39",
+                        "value": 1.0,
+                        "displayValue": "1"
+                    },
+                    {
+                        "name": "fieldGoalsMade40_49",
+                        "displayName": "Field Goals Made 40-49",
+                        "shortDisplayName": "FGM 40-49",
+                        "description": "The number of field goals made from 40-49 yards.",
+                        "abbreviation": "FGM 40-49",
+                        "value": 1.0,
+                        "displayValue": "1"
+                    },
+                    {
+                        "name": "fieldGoalsMade50_59",
+                        "displayName": "Field Goals Made 50-59",
+                        "shortDisplayName": "FGM 50-59",
+                        "description": "The number of field goals made from 50-59 yards.",
+                        "abbreviation": "FGM 50-59",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "fieldGoalsMade60_99",
+                        "displayName": "Field Goals Made 60-99",
+                        "shortDisplayName": "FGM 60-99",
+                        "description": "The number of field goals made from 60-99 yards.",
+                        "abbreviation": "FGM 60-99",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    },
+                    {
+                        "name": "fieldGoalsMade50",
+                        "displayName": "Field Goals Made 50+",
+                        "shortDisplayName": "FGM 50+",
+                        "description": "The number of field goals made from 50+ yards.",
+                        "abbreviation": "50+",
+                        "value": 0.0,
+                        "displayValue": "0"
+                    }
+                ]
+            }
+        ]
+    }
+}
