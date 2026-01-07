@@ -28,10 +28,5 @@ export const gameConstants = [
         gameId: '401772976',
         gameTimeStart: '13 Jan 2026 01:15:00 GMT',
         gameTitle: 'texans-steelers'
-    },
-    {
-        gameId: '401772961',
-        gameTimeStart: '1 Jan 2026 04:30:00 GMT',
-        gameTitle: 'raiders-chiefs'
     }
 ]

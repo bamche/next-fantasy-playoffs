@@ -5,7 +5,7 @@ import processGamesAutomatically from '../../utils/processGamesAutomatically';
 
 export default async function playerStats(req, res) {
   const { email } = req.query;
-  // redisClient.flushDb();
+  
   await processGamesAutomatically();
 
   const cache = await redisClient.get(`team-view-${email}`);
