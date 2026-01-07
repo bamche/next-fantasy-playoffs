@@ -1,4 +1,4 @@
-import db from '../../lib/playerDataModels'
+import db from '../../lib/pgClient'
 import ProcessLeagueView from '../../utils/ProcessLeagueView';
 
 export default async function leagueView (req, res) {

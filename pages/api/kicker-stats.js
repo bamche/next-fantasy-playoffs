@@ -1,4 +1,4 @@
-import db from '../../lib/playerDataModels'
+import db from '../../lib/pgClient'
 
 //to get the stats of all players that are on at least one team
 export default async function detailedPlayerStats(req, res) {

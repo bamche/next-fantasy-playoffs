@@ -1,4 +1,4 @@
-import db from '../../lib/playerDataModels'
+import db from '../../lib/pgClient'
 
 //to get the stats of all players that are on at least one team
 export default async function detailedPlayerStats(req, res) {
@@ -13,7 +13,7 @@ export default async function detailedPlayerStats(req, res) {
     //process each row to make a list of players to check against
     SQLplayerIDList.rows.forEach( row => idString += `${row.row.replace('(' , '').replace(')', '')}, ` );
     const rawPlayerIDList = (idString.slice(0, -2));
-    const statsQueryString = `SELECT * FROM public.player_list WHERE player_id IN ${rawPlayerIDList}); `
+    const statsQueryString = `SELECT *, nfl.abbreviation as abbreviation FROM public.player_list join all_nfl_teams nfl on player_list.nfl_team = nfl.id WHERE player_id IN ${rawPlayerIDList}); `
     const offensePlayerStats =  (await db.query(statsQueryString)).rows;
         
     res.status(200).send({ offensePlayerStats })

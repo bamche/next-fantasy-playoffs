@@ -1,4 +1,4 @@
-import db from '../../lib/playerDataModels';
+import db from '../../lib/pgClient';
 import ProcessTeamView from '../../utils/ProcessTeamView';
 import redisClient from '../../lib/redisClient';
 
@@ -25,7 +25,7 @@ export default async function playerStats(req, res) {
 
     const playerStats = []
     
-    const statsQueryString = `SELECT * FROM public.player_list WHERE player_id IN ${rawPlayerIDList}; `
+    const statsQueryString = `SELECT *, nfl.abbreviation as abbreviation FROM public.player_list join all_nfl_teams nfl on player_list.nfl_team = nfl.id WHERE player_id IN ${rawPlayerIDList}; `
     const individualTeamStats =  (await db.query(statsQueryString)).rows;
     
     //reorder results

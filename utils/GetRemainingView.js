@@ -1,4 +1,4 @@
-import db from '../lib/playerDataModels'
+import db from '../lib/pgClient'
 import ProcessRemainingView from './ProcessRemainingView';
 
 export default async function GetRemainingView() {

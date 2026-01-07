@@ -1,4 +1,4 @@
-import db from '../../lib/playerDataModels'
+import db from '../../lib/pgClient'
 
 export default async function teamBuilder(req, res) {
   if (req.method === 'POST') {
@@ -55,8 +55,10 @@ export default async function teamBuilder(req, res) {
 
     try{
           
-      const playerQueryString = `SELECT player_id, player_name, position, nfl_team FROM public.player_list`;
-      const defQueryString = `SELECT def_id, nfl_team FROM public.def_list`;
+      const playerQueryString = 
+        `SELECT player_id, player_name, position, nfl.abbreviation as nfl_team, nfl.color, nfl.alternate_color 
+        FROM public.player_list JOIN all_nfl_teams nfl ON player_list.nfl_team = nfl.id`;
+      const defQueryString = `SELECT def_id, def_list.nfl_team, nfl.color, nfl.alternate_color FROM public.def_list JOIN all_nfl_teams nfl ON def_list.def_id = nfl.id`;
       
       const playerList = await db.query(playerQueryString);
       const defList = await db.query(defQueryString);

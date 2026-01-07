@@ -1,6 +1,6 @@
 const axios = require('axios');
 const format = require('pg-format');
-import db from '../../../lib/playerDataModels';
+import db from '../../../lib/pgClient';
 import redisClient from '../../../lib/redisClient';
 import { updateUserListPointsQuery, updateUserDefPointsQuery, offStatRecordPoints, GAME_URL} from '../../../utils/constants'
 

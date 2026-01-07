@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "setup-db": "node scripts/setup-database.js"
+    "setup-db": "node scripts/setup-database.js",
+    "get-nfl-teams": "node scripts/get-nfl-teams.js",
+    "get-player-list-by-teams": "node scripts/get-player-list-by-teams.js"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
