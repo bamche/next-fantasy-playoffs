@@ -146,6 +146,7 @@ export async function getServerSideProps(context) {
       leagueStats = await GetleagueView()
       console.log('cache miss')
       redisClient.set('league-view', JSON.stringify(leagueStats));
+      redisClient.expire('league-view', 60 * 60 * 3); // 3 hours
     } else {
       leagueStats = JSON.parse(cache);
     }

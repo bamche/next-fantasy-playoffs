@@ -7,8 +7,8 @@ export default async function playerStats(req, res) {
   const { email } = req.query;
   
   await processGamesAutomatically();
-
   const cache = await redisClient.get(`team-view-${email}`);
+  
   if (cache) {
     const teamViewStats = JSON.parse(cache);
     return res.status(200).send({ teamViewStats })   
@@ -43,6 +43,7 @@ export default async function playerStats(req, res) {
     const defStats =  (await db.query(defQueryString)).rows[0];
     const teamViewStats = ProcessTeamView(playerStats, defStats);
     redisClient.set(`team-view-${email}`, JSON.stringify(teamViewStats));
+    redisClient.expire(`team-view-${email}`, 60 * 60 * 6); // 6 hours
     res.status(200).send({ teamViewStats })
 
   } catch(e) {
