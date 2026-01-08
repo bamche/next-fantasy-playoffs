@@ -2,7 +2,7 @@ import { positionList, defStatRecords, defStatRecordPoints} from "./constants";
 
 export default function ProcessLeagueView(leagueStats) {
 
-//     const stats = await axios.get('/api/league-view');
+//     const stats = await axios.get('/api/detailed-league-view');
 //  const leagueStats = stats.data.leagueStats;
     const tempRows = [];
     let teamID = 0;

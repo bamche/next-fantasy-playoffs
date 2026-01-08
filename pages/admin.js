@@ -22,6 +22,13 @@ export default function Admin({ session }) {
 
   }
 
+  function onSubmitESPN(e) {
+    e.preventDefault();
+    console.log('gameID:'+e.target[0].value)
+    axios.post('/api/admin/get-game-stats-espn', null, {headers,params:{gameId:e.target[0].value}})
+        .then(res => console.log(res))
+  }
+
   async function updatePlayerList() {
     const playerListLog = await axios.get('/api/admin/get-player-list');
     console.log(playerListLog);
@@ -31,12 +38,20 @@ export default function Admin({ session }) {
         <div className="App">
           <h1>API Query</h1>
           <div id="api-query-form">
+            <h2>Get Game Stats V1</h2>
               <form method={'POST'} onSubmit={onSubmit} >
                   <input name="gameID" type="text" placeholder="YYYYMMDD-{away team}-{home team}" className="form-control"></input>
                   <input name="week" type="text" placeholder="week 1/2/3/4" className="form-control"></input>
                   <div className="d-grid gap-2 ">
                       <input type='submit' value="submit" id="submit-query-button" className="btn btn-primary"></input>
+                  </div>
+              </form>
 
+              <h2>Get Game Stats V2 - EPSN</h2>
+              <form method={'POST'} onSubmit={onSubmitESPN} >
+                  <input name="gameID" type="text" placeholder="espn game id" className="form-control"></input>
+                  <div className="d-grid gap-2 ">
+                      <input type='submit' value="submit" id="submit-query-button" className="btn btn-primary"></input>
                   </div>
               </form>
 
