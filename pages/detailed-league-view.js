@@ -1,7 +1,6 @@
 import React from "react";
 import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import axios from "axios";
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
 import GetleagueView from "../utils/GetLeagueView"
 const columns = [
@@ -106,9 +105,9 @@ export default function LeagueView({ session, leagueStats }){
 
   return(
     <div > 
-      <h1> Leader Board </h1>
+      <h1> Detailed League View </h1>
       {!isLeagueStart() && (
-        <h2> *** Leader Board available after {startTimeDate.toLocaleString()} ***</h2>
+        <h2> *** Detailed League View available after {startTimeDate.toLocaleString()} ***</h2>
       )}
       <div style={{ height: 700, width: '100%' }}>
       <DataGrid
@@ -141,12 +140,12 @@ export async function getServerSideProps(context) {
   let leagueStats = [];
   try {
     const { default: redisClient } = await import('../lib/redisClient');
-    const cache = await redisClient.get('league-view')
+    const cache = await redisClient.get('detailed-league-view')
     if (!cache) {
       leagueStats = await GetleagueView()
       console.log('cache miss')
-      redisClient.set('league-view', JSON.stringify(leagueStats));
-      redisClient.expire('league-view', 60 * 60 * 3); // 3 hours
+      redisClient.set('detailed-league-view', JSON.stringify(leagueStats));
+      redisClient.expire('detailed-league-view', 60 * 60 * 3); // 3 hours
     } else {
       leagueStats = JSON.parse(cache);
     }

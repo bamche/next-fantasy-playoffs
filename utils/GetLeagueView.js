@@ -45,7 +45,7 @@ export default async function GetLeagueView() {
     return processedLeagueStats;
   
   } catch(e) {
-    console.log(`league-view api error (fetching all team scoring/player data):  ${e}`);
+    console.log(`detailed-league-view api error (fetching all team scoring/player data):  ${e}`);
     
   }
 
