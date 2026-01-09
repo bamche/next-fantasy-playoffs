@@ -149,6 +149,7 @@ export async function getServerSideProps(context) {
     } else {
       leagueStats = JSON.parse(cache);
     }
+    console.log('leagueStats', leagueStats)
   } catch (err) {
     console.log(`server side error in league-view: ${err}`);
   }

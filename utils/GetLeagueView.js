@@ -1,14 +1,18 @@
 import db from '../lib/pgClient'
 import ProcessLeagueView from './ProcessLeagueView';
+import { detailedLeagueViewQuery } from '../constants/game/sqlQueries';
 
 export default async function GetLeagueView() {
   
   try{
+    const leagueStats = await db.query(detailedLeagueViewQuery);
+
+    return leagueStats.rows;
     //retrieve emails of all players in league
     const emailQueryString = `SELECT email FROM public.user_list;`
     const emailList = (await db.query(emailQueryString)).rows;
     
-    const leagueStats = {};
+    // const leagueStats = {};
       
     for(const email of emailList) {
   
