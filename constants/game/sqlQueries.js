@@ -30,15 +30,11 @@ WITH all_team_players AS (
   LEFT JOIN public.all_nfl_teams nfl ON dl.nfl_team = nfl.abbreviation
 ),
 total_points_calc AS (
-  -- Calculate total points for all players (including eliminated)
+  -- Calculate total points from weekly totals
   SELECT 
     ul.email,
-    COALESCE(SUM(COALESCE(pl.points1, 0) + COALESCE(pl.points2, 0) + COALESCE(pl.points3, 0) + COALESCE(pl.points4, 0)), 0) +
-    COALESCE(SUM(COALESCE(dl.points1, 0) + COALESCE(dl.points2, 0) + COALESCE(dl.points3, 0) + COALESCE(dl.points4, 0)), 0) AS total_points
+    COALESCE(ul.total1, 0) + COALESCE(ul.total2, 0) + COALESCE(ul.total3, 0) + COALESCE(ul.total4, 0) AS total_points
   FROM public.user_list ul
-  LEFT JOIN public.player_list pl ON pl.player_id IN (ul.qb, ul.rb1, ul.rb2, ul.wr1, ul.wr2, ul.te, ul.flex1, ul.flex2, ul.flex3, ul.flex4, ul.k)
-  LEFT JOIN public.def_list dl ON ul.dst = dl.def_id
-  GROUP BY ul.email
 )
 SELECT 
   ul.email,
