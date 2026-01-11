@@ -1,7 +1,7 @@
 const axios = require('axios');
 const format = require('pg-format');
 import db from '../../../lib/pgClient';
-import redisClient from '../../../lib/redisClient';
+import { deleteTeamViewKeys, deleteLeagueViewKey } from '../../../lib/redisClient';
 import { 
     updateUserListPointsQuery, 
     updateUserDefPointsQuery, 
@@ -35,8 +35,8 @@ export async function processGameStats(gameId) {
     const playerStats = await espnClient.getPlayerStatistics(gameId, teamPlayerIds);
     
     try {
-        await redisClient.deleteTeamViewKeys();
-        await redisClient.deleteLeagueViewKey();
+        await deleteTeamViewKeys();
+        await deleteLeagueViewKey();
         console.log('All caches invalidated (current database).');
     } catch(e){
         console.log(`get-game-stats cache error:  ${e}`);
