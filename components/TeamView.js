@@ -24,28 +24,28 @@ const columns = [
     editable: false,
   },
   {
-    field: 'week-1',
+    field: 'points1',
     headerName: 'Wild Card',
     type: 'number',
     width: 130,
     editable: false,
   },
   {
-    field: 'week-2',
+    field: 'points2',
     headerName: 'Divisional',
     type: 'number',
     width: 130,
     editable: false,
   },
   {
-    field: 'week-3',
+    field: 'points3',
     headerName: 'Conference',
     type: 'number',
     width: 130,
     editable: false,
   },
   {
-    field: 'week-4',
+    field: 'points4',
     headerName: 'Super Bowl',
     type: 'number',
     width: 130,
@@ -64,32 +64,31 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-function TeamView({ session }){
-  const [rows, setRows] = useState([])
-  const [isTeamSet, setIsTeamSet] = useState(false);
-  const email = session.user.email;
+function TeamView({ email, teamViewStats }){
+//   const [rows, setRows] = useState([])
+//   const [isTeamSet, setIsTeamSet] = useState(false);
   
-  useEffect(() =>{
-  const fetchPlayer = async () => {
+//   useEffect(() =>{
+//   const fetchPlayer = async () => {
    
-    const statsRespose = await axios.get('/api/player-stats', { params:{email} } );
-    console.log(statsRespose)
-    if (statsRespose.data.length != 0) {
-      setIsTeamSet(true);
-      const teamViewStats = statsRespose.data.teamViewStats;
-      setRows(teamViewStats);
-    }
+//     const statsRespose = await axios.get('/api/player-stats', { params:{email} } );
+//     console.log(statsRespose)
+//     if (statsRespose.data.length != 0) {
+//       setIsTeamSet(true);
+//       const teamViewStats = statsRespose.data.teamViewStats;
+//       setRows(teamViewStats);
+//     }
   
-  };
-  fetchPlayer();
-}, []);
+//   };
+//   fetchPlayer();
+// }, []);
 return (
   <div>
-    <h1>{email} - Team View</h1>
+    <h1>Team View - {email}</h1>
     <div style={{ height: 600, width: '100%' }}>
-      {isTeamSet ? (
+      {teamViewStats ? (
         <DataGrid
-          rows={rows}
+          rows={teamViewStats}
           columns={columns}
           density="compact"
           pageSize={13}

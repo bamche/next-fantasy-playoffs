@@ -105,7 +105,7 @@ async function updatePlayerStats(playerStats, playerIdToPositionMap, playerIdToN
             const rec_td = (position === "K" ? 0 : playerStat.receivingTouchdowns);
             const rec = ((position === "K" || position === "TE") ? 0 : playerStat.receptions);
             const te_rec = (position === "TE" ? playerStat.receptions : 0);
-            const two_pt = (position === "K" ? 0 : playerStat.twoPtPass);
+            const two_pt = (position === "K" ? 0 : playerStat.twoPtPass + playerStat.twoPtRush + playerStat.twoPtReception);
             const fg30 = 0;
             const fg40 = 0;
             const fg50 = 0;

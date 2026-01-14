@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
 import GetLeaderBoardView from "../utils/GetLeaderBoardView"
+import EmailLink from "../components/EmailLink"
 
 export default function LeaderBoard({ session, leaderBoardData }){
     const startTimeDate = new Date(TIME_CUT_OFF);
@@ -63,9 +64,9 @@ export default function LeaderBoard({ session, leaderBoardData }){
                 <CardContent sx={{ marginBottom: -1.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="h7" component="div" sx={{ fontWeight: 'bold' }}>
-                        {entry.email}
-                      </Typography>
+                      <Box onClick={(e) => e.stopPropagation()}>
+                        <EmailLink email={entry.email} variant="h7" sx={{ fontWeight: 'bold' }} />
+                      </Box>
 
                     </Box>
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>

@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
 import GetleagueView from "../utils/GetLeagueView"
+import EmailLink from "../components/EmailLink"
 const columns = [
   {
     field: 'total',
@@ -12,7 +13,13 @@ const columns = [
   { 
     field: 'email', 
     headerName: 'email', 
-    width: 130 },
+    width: 170,
+    align: 'left',
+    headerAlign: 'left',
+    renderCell: (params) => (
+      <EmailLink email={params.value} />
+    ),
+  },
   { 
     field: 'qb', 
     headerName: 'QB', 
