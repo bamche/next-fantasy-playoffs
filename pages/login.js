@@ -37,7 +37,6 @@ const useStyles = makeStyles({
 
 export default function Login({ csrfToken }){
     const classes = useStyles();
-      //state to store input field values
     const [email, setEmail] = useState('');
     const router = useRouter();
 
@@ -45,8 +44,7 @@ export default function Login({ csrfToken }){
         console.log(email)         
         console.log('csrf', csrfToken)      
         router.push(`/api/auth/signin`)
-        // await axios.post('api/auth/callback/google', { email, csrfToken })
-        // console.log(response)
+
     };
      
     return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getSession } from 'next-auth/react';
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import axios from "axios";
 import PlayerColumn from '../components/PlayerColumn';
 import List from '@mui/material/List';
@@ -12,6 +13,7 @@ import TextField from '@mui/material/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import ConditionalButon from "../components/ConditionalButton";
+import RequireAuth from "../components/RequireAuth";
 
 export default function TeamBuilder({ session, timeCutoff }) {
   
@@ -256,93 +258,94 @@ export default function TeamBuilder({ session, timeCutoff }) {
   }
 
   return (
-    <div>
-      <h1>Welcome {email}</h1>
-      <h3>Make and submit your player selection. </h3>
-      <h4>Clicking players under the Team Selection column will deselect them.  
-        If you select a player that is incompatible with your current selection, the players name will turn red and not be added. </h4>
-      <h4>New submissions will overwrite previous submissions - available until {startTimeDate.toLocaleString()} </h4>
-      
-      <Grid 
-        container 
-        spacing={{ xs: 1, sm: 3, md: 4 }} 
-        columns={{ xs: 4, sm: 8, md: 12 }}
-        direction="row"
-        width={"100%"}
-        >
-        <Grid item xs={2} sm={4} md={4}>
-          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}> 
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography gutterBottom variant="h5" component="h2">
-                Team Selection
-              </Typography>
-              <Typography>
-                <PlayerColumn teamSelection={teamSelection} removePlayer={removePlayer} />
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <ConditionalButon submitTeam={submitTeam} waitingResponse={waitingResponse}>Submit Team</ConditionalButon> :
-            </CardActions>
-          </Card>  
-        </Grid>
-        <Grid item xs={2} sm={4} md={4}>
-          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>      
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography gutterBottom variant="h5" component="h2">
-              Player List
-              </Typography>
-          <TextField 
-            fullWidth 
-            label="Search field" 
-            id="search" 
-            size="small"
-            hiddenLabel
-            onChange={filter}
-          />
-          <List
-            sx={{
-              width: '100%',
-              maxWidth: 360,
-              bgcolor: 'background.paper',
-              position: 'relative',
-              overflow: 'auto',
-              maxHeight: 380,
-              '& ul': { padding: 0 },
-            }}
-            subheader={<li />}
+    <RequireAuth session={session}> 
+      <div>
+        <h1>Welcome {email}</h1>
+        <h3>Make and submit your player selection. </h3>
+        <h4>Clicking players under the Team Selection column will deselect them.  
+          If you select a player that is incompatible with your current selection, the players name will turn red and not be added. </h4>
+        <h4>New submissions will overwrite previous submissions - available until {startTimeDate.toLocaleString()} </h4>
+        
+        <Grid 
+          container 
+          spacing={{ xs: 1, sm: 3, md: 4 }} 
+          columns={{ xs: 4, sm: 8, md: 12 }}
+          direction="row"
+          width={"100%"}
           >
-          {foundPlayers.map(el => (<li className="list-group-item" key={el[0]} playerid={el[0]} color={el[2]} alternateColor={el[3]} onClick={addPlayer}>{el[1]}</li>))} 
-          </List>
-          </CardContent>
-          </Card> 
-        </Grid>
-      </Grid>  
-       <Snackbar open={entrySubmitted} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          Entry successfully submitted!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={afterTimeWarning} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="warning">
-          Cannot update lineup: submissions accepted until {startTimeDate.toLocaleString()}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={submissionError} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          Error submitting linup. Make sure your entry is valid.
-        </Alert>
-      </Snackbar>
-    </div>
-
+          <Grid item xs={2} sm={4} md={4}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}> 
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography gutterBottom variant="h5" component="h2">
+                  Team Selection
+                </Typography>
+                <Typography>
+                  <PlayerColumn teamSelection={teamSelection} removePlayer={removePlayer} />
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <ConditionalButon submitTeam={submitTeam} waitingResponse={waitingResponse}>Submit Team</ConditionalButon> :
+              </CardActions>
+            </Card>  
+          </Grid>
+          <Grid item xs={2} sm={4} md={4}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>      
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography gutterBottom variant="h5" component="h2">
+                Player List
+                </Typography>
+            <TextField 
+              fullWidth 
+              label="Search field" 
+              id="search" 
+              size="small"
+              hiddenLabel
+              onChange={filter}
+            />
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                bgcolor: 'background.paper',
+                position: 'relative',
+                overflow: 'auto',
+                maxHeight: 380,
+                '& ul': { padding: 0 },
+              }}
+              subheader={<li />}
+            >
+            {foundPlayers.map(el => (<li className="list-group-item" key={el[0]} playerid={el[0]} color={el[2]} alternateColor={el[3]} onClick={addPlayer}>{el[1]}</li>))} 
+            </List>
+            </CardContent>
+            </Card> 
+          </Grid>
+        </Grid>  
+        <Snackbar open={entrySubmitted} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            Entry successfully submitted!
+          </Alert>
+        </Snackbar>
+        <Snackbar open={afterTimeWarning} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="warning">
+            Cannot update lineup: submissions accepted until {startTimeDate.toLocaleString()}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={submissionError} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error">
+            Error submitting linup. Make sure your entry is valid.
+          </Alert>
+        </Snackbar>
+      </div>
+    </RequireAuth>
   )
 };
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   return {
     props: {
-      session: sessionUser,
+      session,
     },
   };
 }

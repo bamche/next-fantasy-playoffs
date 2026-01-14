@@ -158,4 +158,13 @@ SELECT
     ),
     'total_score', (SELECT total_score FROM total_score_calc)
   ) AS teamViewStats;
-`
+`;
+
+// Insert a new notification
+// Takes title ($1), message ($2), and type ($3) as parameters
+// Returns the created notification with all fields
+export const insertNotificationQuery = `
+  INSERT INTO public.notifications (title, message, type)
+  VALUES ($1, $2, $3)
+  RETURNING notification_id, title, message, type, created_at;
+`;

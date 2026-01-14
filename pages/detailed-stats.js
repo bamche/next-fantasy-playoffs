@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { getSession } from 'next-auth/react';
-import { positionList, defStatRecords, defStatRecordPoints, offStatRecords, offStatRecordPoints, TIME_CUT_OFF, isLeagueStart} from "../utils/constants";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+import { offStatRecordPoints, TIME_CUT_OFF, isLeagueStart} from "../utils/constants";
+import RequireAuth from "../components/RequireAuth";
 
 const columns = [
 
@@ -163,34 +165,36 @@ export default function OffenseStats({ session }){
   fetchPlayer();
 }, []);
   return(
-    <div> 
-      <h1>Detailed Player Stats </h1>
-      {!isLeagueStart() && (
-            <h2> *** Available after {new Date(TIME_CUT_OFF).toLocaleString()} ***</h2>
-          )}
-      <div style={{ height: 700, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={20}
-        density={'compact'}
-        disableSelectionOnClick
-        disableColumnMenu
-        components={{
-          Toolbar: GridToolbar,
-        }}
-      />
+    <RequireAuth session={session}>
+      <div> 
+        <h1>Detailed Player Stats </h1>
+        {!isLeagueStart() && (
+              <h2> *** Available after {new Date(TIME_CUT_OFF).toLocaleString()} ***</h2>
+            )}
+        <div style={{ height: 700, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={20}
+          density={'compact'}
+          disableSelectionOnClick
+          disableColumnMenu
+          components={{
+            Toolbar: GridToolbar,
+          }}
+        />
+        </div>
       </div>
-    </div>
+    </RequireAuth>
   );
 };
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   return {
     props: {
-      session: sessionUser,
+      session,
     },
   };
 }
