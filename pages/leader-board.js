@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { getSession } from 'next-auth/react';
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -143,12 +144,12 @@ export default function LeaderBoard({ session, leaderBoardData }){
 };
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!isLeagueStart()) {
     return {
       props: {
-        session: sessionUser,
+        session,
         leaderBoardData: [],
       },
     };
@@ -169,7 +170,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      session: sessionUser,
+      session,
       leaderBoardData,
     },
   };

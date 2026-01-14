@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { getSession } from 'next-auth/react';
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
+import RequireAuth from "../components/RequireAuth";
 
 const columns = [
   {
@@ -69,7 +71,7 @@ columns.forEach(ele => {
   ele.headerAlign = 'center'
 })
 
-export default function defenseStats(){
+export default function defenseStats({ session }){
   const [rows, setRows] = useState([])
  
   useEffect(() =>{
@@ -82,34 +84,36 @@ export default function defenseStats(){
   fetchPlayer();
 }, []);
   return(
-    <div> 
-      <h1>All Defense Stats </h1>
-      {!isLeagueStart() && (
-            <h2> *** Available after {new Date(TIME_CUT_OFF).toLocaleString()} ***</h2>
-          )}
-      <div style={{ height: 700, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={20}
-        disableSelectionOnClick
-        disableColumnMenu
-        density={'compact'}
-        components={{
-          Toolbar: GridToolbar,
-        }}
-      />
+    <RequireAuth session={session}>
+      <div> 
+        <h1>All Defense Stats </h1>
+        {!isLeagueStart() && (
+              <h2> *** Available after {new Date(TIME_CUT_OFF).toLocaleString()} ***</h2>
+            )}
+        <div style={{ height: 700, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={20}
+          disableSelectionOnClick
+          disableColumnMenu
+          density={'compact'}
+          components={{
+            Toolbar: GridToolbar,
+          }}
+        />
+        </div>
       </div>
-    </div>
+    </RequireAuth>
   );
 };
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   return {
     props: {
-      session: sessionUser,
+      session,
     },
   };
 }

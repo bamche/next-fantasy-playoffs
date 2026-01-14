@@ -1,5 +1,6 @@
 import React from "react";
-import { getSession } from 'next-auth/react';
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -14,12 +15,12 @@ export default function Admin({ session }) {
     <div className="App">
       <h1>Admin Panel</h1>
       <nav style={{ marginBottom: '2rem' }}>
-        <Link href="/admin/gamestatupdates">
+        <Link href="/admin/game-stat-updates">
           <a style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
             Game Stat Updates
           </a>
         </Link>
-        <Link href="/admin/notificationupdates">
+        <Link href="/admin/notification-updates">
           <a style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
             Notification Updates
           </a>
@@ -31,11 +32,11 @@ export default function Admin({ session }) {
 }
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   return {
     props: {
-      session: sessionUser,
+      session,
     },
   };
 }

@@ -1,5 +1,6 @@
 import db from '../../../lib/pgClient';
-import { getToken } from "next-auth/jwt";
+import { authOptions } from "../auth/[...nextauth]"
+import { getServerSession } from "next-auth"
 import { insertNotificationQuery } from '../../../constants/game/sqlQueries';
 
 export default async function addNotification(req, res) {
@@ -8,13 +9,13 @@ export default async function addNotification(req, res) {
   }
 
   try {
-    const token = await getToken({ req, secret: process.env.SECRET });
+    const session = await getServerSession(req, res, authOptions)
     
-    if (!token || !token.email) {
+    if (!session) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    if (token.email !== process.env.NEXT_PUBLIC_ADMIN) {
+    if (session.user?.email !== process.env.NEXT_PUBLIC_ADMIN) {
       return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 

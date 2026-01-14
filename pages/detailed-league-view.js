@@ -1,9 +1,12 @@
 import React from "react";
-import { getSession } from 'next-auth/react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
 import GetleagueView from "../utils/GetLeagueView"
 import EmailLink from "../components/EmailLink"
+import { authOptions } from "./api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
+import RequireAuth from "../components/RequireAuth"
+
 const columns = [
   {
     field: 'total',
@@ -108,37 +111,39 @@ columns.forEach(ele => {
 
 export default function LeagueView({ session, leagueStats }){
     const startTimeDate = new Date(TIME_CUT_OFF);
-    const email = session.user.email;
+ 
 
   return(
-    <div > 
-      <h1> Detailed League View </h1>
-      {!isLeagueStart() && (
-        <h2> *** Detailed League View available after {startTimeDate.toLocaleString()} ***</h2>
-      )}
-      <div style={{ height: 700, width: '100%' }}>
-      <DataGrid
-        rows={leagueStats}
-        columns={columns}
-        // pageSize={18}
-        density={'compact'}
-        disableSelectionOnClick
-        components={{
-          Toolbar: GridToolbar,
-        }}
-      />
+    <RequireAuth session={session}>
+      <div > 
+        <h1> Detailed League View </h1>
+        {!isLeagueStart() && (
+          <h2> *** Detailed League View available after {startTimeDate.toLocaleString()} ***</h2>
+        )}
+        <div style={{ height: 700, width: '100%' }}>
+        <DataGrid
+          rows={leagueStats}
+          columns={columns}
+          // pageSize={18}
+          density={'compact'}
+          disableSelectionOnClick
+          components={{
+            Toolbar: GridToolbar,
+          }}
+        />
+        </div>
       </div>
-    </div>
+    </RequireAuth>
   );
 };
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!isLeagueStart()) {
     return {
       props: {
-        session: sessionUser,
+        session,
         leagueStats: [],
       },
     };
@@ -162,7 +167,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      session: sessionUser,
+      session,
       leagueStats,
     },
   };

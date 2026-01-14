@@ -1,5 +1,6 @@
 import React from "react";
-import { getSession } from 'next-auth/react';
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import TeamView from "../../components/TeamView"
 import GetTeamView from "../../utils/GetTeamView"
 
@@ -20,7 +21,7 @@ export default function TeamViewPage({ email, teamViewStats, error }){
 };
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
   const { email: emailParam } = context.params;
   
   // Decode the email parameter (handles URL encoding)
@@ -51,7 +52,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      session: sessionUser,
+      session,
       email: decodedEmail,
       teamViewStats,
       error,

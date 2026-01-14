@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { getSession } from 'next-auth/react';
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import { kickerStatRecordPoints, isLeagueStart, TIME_CUT_OFF } from "../utils/constants";
+import RequireAuth from "../components/RequireAuth";
 
 const columns = [
  
@@ -114,6 +116,7 @@ export default function KickerStats({ session }){
   fetchPlayer();
 }, []);
   return(
+    <RequireAuth session={session}>
     <div> 
       <h1>Kicker Stats </h1>
        {!isLeagueStart() && (
@@ -132,14 +135,15 @@ export default function KickerStats({ session }){
       />
       </div>
     </div>
+    </RequireAuth>
   );
 };
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   return {
     props: {
-      session: sessionUser,
+      session,
     },
   };
 }

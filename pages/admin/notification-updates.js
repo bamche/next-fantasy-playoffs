@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { getSession } from 'next-auth/react';
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 import axios from "axios";
 import Link from 'next/link';
 import Button from '@mui/material/Button';
@@ -104,11 +105,11 @@ export default function NotificationUpdates({ session }) {
 }
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   return {
     props: {
-      session: sessionUser,
+      session,
     },
   };
 }

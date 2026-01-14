@@ -1,6 +1,8 @@
 import Login from '../components/Login';
 import TeamView from '../components/TeamView';
-import { getSession, getCsrfToken } from 'next-auth/react';
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+import { getCsrfToken } from 'next-auth/react';
 
 export default function Home({ session, csrfToken }) {
   if(!session) return <Login session={session} csrfToken={csrfToken}  />
@@ -8,8 +10,10 @@ export default function Home({ session, csrfToken }) {
 }
 
 export async function getServerSideProps(context) {
-  const sessionUser = await getSession(context);  
-  if (sessionUser?.user?.email) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const csrfToken = await getCsrfToken(context);
+  
+  if (session?.user?.email) {
     return {
       redirect: {
         destination: '/team-view',
@@ -19,7 +23,8 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      session: sessionUser,
+      session,
+      csrfToken,
     },
   };
 }

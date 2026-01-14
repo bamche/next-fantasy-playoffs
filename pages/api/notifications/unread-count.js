@@ -6,13 +6,11 @@ export default async function unreadNotificationCount(req, res) {
   if (req.method === 'GET') {
     try {
       const session = await getServerSession(req, res, authOptions)
-      console.log(session)
       if (!session) {
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      // Token might have email directly or in sub/email field depending on NextAuth config
-      const email = token.email || token.sub;
+      const email = session.user?.email;
       
       if (!email) {
         return res.status(401).json({ error: 'Unauthorized: No email found' });

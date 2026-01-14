@@ -1,16 +1,17 @@
 import db from '../../../lib/pgClient'
-import { getToken } from "next-auth/jwt";
+import { authOptions } from "../auth/[...nextauth]"
+import { getServerSession } from "next-auth"
 
 export default async function markNotificationsViewed(req, res) {
   if (req.method === 'POST') {
     try {
-      const token = await getToken({ req, secret: process.env.SECRET });
+      const session = await getServerSession(req, res, authOptions)
       
-      if (!token) {
+      if (!session) {
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      const email = token.email || token.sub;
+      const email = session.user?.email;
       
       if (!email) {
         return res.status(401).json({ error: 'Unauthorized: No email found' });
@@ -19,11 +20,11 @@ export default async function markNotificationsViewed(req, res) {
       // Mark all unviewed notifications as viewed for this user
       const queryString = `
         INSERT INTO notification_views (notification_id, email, viewed_at)
-        SELECT n.notification_id, $1, CURRENT_TIMESTAMP
+        SELECT n.notification_id, $1::varchar, CURRENT_TIMESTAMP
         FROM notifications n
         WHERE NOT EXISTS (
           SELECT 1 FROM notification_views nv 
-          WHERE nv.notification_id = n.notification_id AND nv.email = $1
+          WHERE nv.notification_id = n.notification_id AND nv.email = $1::varchar
         )
         ON CONFLICT (notification_id, email) DO NOTHING
       `;

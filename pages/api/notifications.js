@@ -1,16 +1,17 @@
 import db from '../../lib/pgClient'
-import { getToken } from 'next-auth/jwt';
+import { authOptions } from "./auth/[...nextauth]"
+import { getServerSession } from "next-auth"
 
 export default async function notifications(req, res) {
   if (req.method === 'GET') {
     try {
-      const token = await getToken({ req, secret: process.env.SECRET });
+      const session = await getServerSession(req, res, authOptions)
       
-      if (!token) {
+      if (!session) {
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      const email = token.email || token.sub;
+      const email = session.user?.email;
       
       if (!email) {
         return res.status(401).json({ error: 'Unauthorized: No email found' });
