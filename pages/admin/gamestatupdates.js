@@ -1,10 +1,10 @@
-
 import React from "react";
 import { getSession } from 'next-auth/react';
 import axios from "axios";
 import Button from '@mui/material/Button';
+import Link from 'next/link';
 
-export default function Admin({ session }) {
+export default function GameStatUpdates({ session }) {
   if (session.user.email != process.env.NEXT_PUBLIC_ADMIN) {
     throw new Error("Unauthorized to view this page");
   }
@@ -36,7 +36,10 @@ export default function Admin({ session }) {
 
     return (
         <div className="App">
-          <h1>API Query</h1>
+          <Link href="/admin">
+            <a style={{ display: 'inline-block', marginBottom: '1rem', color: '#007bff', textDecoration: 'none' }}>← Back to Admin</a>
+          </Link>
+          <h1>Game Stat Updates</h1>
           <div id="api-query-form">
             <h2>Get Game Stats V1</h2>
               <form method={'POST'} onSubmit={onSubmit} >
@@ -70,3 +73,5 @@ export async function getServerSideProps(context) {
     },
   };
 }
+
+

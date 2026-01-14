@@ -156,6 +156,26 @@ CREATE TABLE "all_nfl_teams" (
   OIDS=FALSE
 );
 
+CREATE TABLE "notifications" (
+    "notification_id" SERIAL NOT NULL,
+    "title" varchar NOT NULL,
+    "message" text NOT NULL,
+    "type" varchar,
+    "created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT "notifications_pk" PRIMARY KEY ("notification_id")
+) WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE "notification_views" (
+    "notification_id" integer NOT NULL,
+    "email" varchar NOT NULL,
+    "viewed_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT "notification_views_pk" PRIMARY KEY ("notification_id", "email")
+) WITH (
+  OIDS=FALSE
+);
+
 
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk0" FOREIGN KEY ("qb") REFERENCES "player_list"("player_id");
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk1" FOREIGN KEY ("rb1") REFERENCES "player_list"("player_id");
@@ -170,6 +190,8 @@ ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk9" FOREIGN KEY ("flex4") REF
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk10" FOREIGN KEY ("k") REFERENCES "player_list"("player_id");
 ALTER TABLE "user_list" ADD CONSTRAINT "user_list_fk11" FOREIGN KEY ("dst") REFERENCES "def_list"("def_id");
 ALTER TABLE "player_list" ADD CONSTRAINT "player_list_fk12" FOREIGN KEY ("nfl_team") REFERENCES "all_nfl_teams"("id");
+ALTER TABLE "notification_views" ADD CONSTRAINT "notification_views_fk0" FOREIGN KEY ("notification_id") REFERENCES "notifications"("notification_id") ON DELETE CASCADE;
+ALTER TABLE "notification_views" ADD CONSTRAINT "notification_views_fk1" FOREIGN KEY ("email") REFERENCES "user_list"("email") ON DELETE CASCADE;
 
 
 ------------------------------------------------------------------------------------------------------------------
