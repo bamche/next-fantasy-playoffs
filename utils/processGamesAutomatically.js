@@ -18,7 +18,7 @@ export default async function processGamesAutomatically() {
         const gameStartTime = new Date(game.gameTimeStart);
         const hoursSinceStart = (currentTime - gameStartTime) / (1000 * 60 * 60); // Convert milliseconds to hours
 
-        if (hoursSinceStart >= 4) {
+        if (hoursSinceStart >= 3.5) {
             eligibleGameIds.push(game.gameId);
         }
     }
