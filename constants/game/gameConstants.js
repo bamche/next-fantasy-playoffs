@@ -48,5 +48,15 @@ export const gameConstants = [
         gameId: '401772985',
         gameTimeStart: '18 Jan 2026 23:30:00 GMT',
         gameTitle: 'rams-bears'
+    },
+    {
+        gameId: '401772986',
+        gameTimeStart: '25 Jan 2026 20:00:00 GMT',
+        gameTitle: 'patriots-bronchos'
+    },
+    {
+        gameId: '401772987',
+        gameTimeStart: '25 Jan 2026 23:30:00 GMT',
+        gameTitle: 'rams-seahawks'
     }
 ]
